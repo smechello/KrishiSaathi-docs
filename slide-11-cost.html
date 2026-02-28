@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 11 — Estimated Implementation Cost | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 36px 20px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 6px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 26px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 4px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #16a34a; margin-bottom: 2px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+
+  /* ── COST LAYOUT ───────────────────── */
+  .cost-layout {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    min-height: 0;
+  }
+
+  /* Left: Cost table */
+  .cost-table-wrap {
+    flex: 1.8;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .cost-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 3px;
+    flex: 1;
+  }
+  .cost-table th {
+    background: #0f172a;
+    color: #fff;
+    padding: 6px 10px;
+    text-align: left;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .cost-table th:first-child { border-radius: 6px 0 0 6px; }
+  .cost-table th:last-child { border-radius: 0 6px 6px 0; }
+  .cost-table td {
+    padding: 6px 10px;
+    font-size: 10px;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .cost-table td:first-child { border-left: 1px solid #f1f5f9; border-radius: 6px 0 0 6px; font-weight: 700; color: #1e293b; }
+  .cost-table td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 6px 6px 0; }
+  .cost-table tr:hover td { background: #f0fdf4; }
+  .cost-table .svc-name { display: flex; align-items: center; gap: 6px; }
+  .cost-table .svc-ico-s { font-size: 12px; }
+  .cost-table .tier-badge {
+    display: inline-block;
+    font-size: 7.5px; font-weight: 700;
+    padding: 1.5px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .tier-free { background: #dcfce7; color: #15803d; }
+  .tier-paid { background: #fff7ed; color: #c2410c; }
+  .tier-low  { background: #eff6ff; color: #1d4ed8; }
+  .cost-val { font-weight: 800; }
+  .cv-free { color: #16a34a; }
+  .cv-low { color: #2563eb; }
+  .cv-paid { color: #ea580c; }
+
+  .total-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .total-bar .tb-lbl { font-size: 11px; font-weight: 700; }
+  .total-bar .tb-val { font-size: 18px; font-weight: 800; color: #fbbf24; }
+  .total-bar .tb-note { font-size: 9px; color: #94a3b8; }
+
+  /* Right panel */
+  .right-cost {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    min-height: 0;
+  }
+  .cost-card {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    flex-shrink: 0;
+  }
+  .cost-card .cc-title { font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .donut-visual {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .donut-ring {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #16a34a 0% 45%,
+      #ea580c 45% 70%,
+      #2563eb 70% 85%,
+      #7c3aed 85% 95%,
+      #fbbf24 95% 100%
+    );
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .donut-center {
+    width: 40px; height: 40px; background: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: #0f172a;
+  }
+  .donut-legend { display: flex; flex-direction: column; gap: 3px; }
+  .dl-item { display: flex; align-items: center; gap: 4px; font-size: 8.5px; color: #475569; }
+  .dl-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+  .saving-card {
+    flex: 1;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1.5px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 0;
+  }
+  .saving-card .sc-title { font-size: 10px; font-weight: 700; color: #15803d; text-transform: uppercase; letter-spacing: 1px; }
+  .saving-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 4px 8px;
+  }
+  .saving-item .sv-name { font-size: 9px; font-weight: 600; color: #1e293b; }
+  .saving-item .sv-val { font-size: 9px; font-weight: 800; color: #16a34a; }
+
+  .scale-card {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    flex-shrink: 0;
+  }
+  .scale-card .sc-title { font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .scale-row { display: flex; gap: 6px; }
+  .scale-item { flex: 1; text-align: center; background: #f8fafc; border-radius: 6px; padding: 6px 4px; }
+  .scale-item .si-lbl { font-size: 8px; color: #64748b; }
+  .scale-item .si-val { font-size: 12px; font-weight: 800; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-10-technologies.html">← Prev</a>
+    <span class="current">12 / 17 — Implementation Cost</span>
+    <a href="slide-12-snapshots.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">💰 Cost Analysis</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Estimated Implementation Cost</div>
+    <div class="page-title">AWS Cost Breakdown & Free Tier Optimization</div>
+    <div class="page-subtitle">Leveraging AWS Free Tier for 80%+ cost savings — production-ready MVP at minimal operational cost</div>
+
+    <div class="cost-layout">
+      <div class="cost-table-wrap">
+        <table class="cost-table">
+          <thead>
+            <tr>
+              <th style="width:28%;">AWS Service</th>
+              <th style="width:16%;">Tier</th>
+              <th style="width:24%;">Usage Estimate</th>
+              <th style="width:16%;">Monthly Cost</th>
+              <th style="width:16%;">Annual Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🧠</span> Amazon Bedrock</div></td>
+              <td><span class="tier-badge tier-paid">Pay-per-use</span></td>
+              <td>~500 requests/day · Claude 3.5 + Haiku</td>
+              <td class="cost-val cv-paid">$25–50</td>
+              <td class="cost-val cv-paid">$300–600</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🔊</span> Amazon Polly</div></td>
+              <td><span class="tier-badge tier-free">Free Tier</span></td>
+              <td>5M chars/mo free · Neural Kajal voice</td>
+              <td class="cost-val cv-free">$0</td>
+              <td class="cost-val cv-free">$0 (yr 1)</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🎤</span> Amazon Transcribe</div></td>
+              <td><span class="tier-badge tier-free">Free Tier</span></td>
+              <td>60 mins/mo free · 10 Indian languages</td>
+              <td class="cost-val cv-free">$0</td>
+              <td class="cost-val cv-free">$0 (yr 1)</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🗄️</span> Amazon RDS</div></td>
+              <td><span class="tier-badge tier-free">Free Tier</span></td>
+              <td>db.t3.micro · 20GB SSD · PostgreSQL 16</td>
+              <td class="cost-val cv-free">$0</td>
+              <td class="cost-val cv-free">$0 (yr 1)</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">☁️</span> Amazon EC2</div></td>
+              <td><span class="tier-badge tier-free">Free Tier</span></td>
+              <td>t2.micro · 750 hrs/mo · Ubuntu</td>
+              <td class="cost-val cv-free">$0</td>
+              <td class="cost-val cv-free">$0 (yr 1)</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🪣</span> Amazon S3</div></td>
+              <td><span class="tier-badge tier-free">Free Tier</span></td>
+              <td>5GB storage · Temp voice files · Auto-cleanup</td>
+              <td class="cost-val cv-free">$0</td>
+              <td class="cost-val cv-free">$0 (yr 1)</td>
+            </tr>
+            <tr>
+              <td><div class="svc-name"><span class="svc-ico-s">🌐</span> External APIs</div></td>
+              <td><span class="tier-badge tier-low">Low Cost</span></td>
+              <td>OpenWeatherMap · Groq · Gemini (free tiers)</td>
+              <td class="cost-val cv-low">$0–5</td>
+              <td class="cost-val cv-low">$0–60</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="total-bar">
+          <div>
+            <div class="tb-lbl">Estimated Total Monthly Cost</div>
+            <div class="tb-note">MVP stage with AWS Free Tier + pay-per-use AI</div>
+          </div>
+          <div class="tb-val">$25 – $55/mo</div>
+        </div>
+      </div>
+
+      <div class="right-cost">
+        <div class="cost-card">
+          <div class="cc-title">Cost Distribution</div>
+          <div class="donut-visual">
+            <div class="donut-ring">
+              <div class="donut-center">$40</div>
+            </div>
+            <div class="donut-legend">
+              <div class="dl-item"><div class="dl-dot" style="background:#16a34a;"></div> Free Tier (45%)</div>
+              <div class="dl-item"><div class="dl-dot" style="background:#ea580c;"></div> Bedrock AI (25%)</div>
+              <div class="dl-item"><div class="dl-dot" style="background:#2563eb;"></div> Compute (15%)</div>
+              <div class="dl-item"><div class="dl-dot" style="background:#7c3aed;"></div> Storage (10%)</div>
+              <div class="dl-item"><div class="dl-dot" style="background:#fbbf24;"></div> APIs (5%)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="saving-card">
+          <div class="sc-title">💡 Free Tier Savings</div>
+          <div class="saving-item"><span class="sv-name">EC2 (t2.micro)</span><span class="sv-val">–$8.50/mo</span></div>
+          <div class="saving-item"><span class="sv-name">RDS (db.t3.micro)</span><span class="sv-val">–$12.50/mo</span></div>
+          <div class="saving-item"><span class="sv-name">Polly (5M chars)</span><span class="sv-val">–$16.00/mo</span></div>
+          <div class="saving-item"><span class="sv-name">Transcribe (60 min)</span><span class="sv-val">–$1.44/mo</span></div>
+          <div class="saving-item"><span class="sv-name">S3 (5GB)</span><span class="sv-val">–$0.12/mo</span></div>
+          <div class="saving-item" style="background:#dcfce7; border-color:#16a34a;">
+            <span class="sv-name" style="font-weight:800;">Total Saved</span>
+            <span class="sv-val" style="font-size:11px;">~$38.56/mo</span>
+          </div>
+        </div>
+
+        <div class="scale-card">
+          <div class="sc-title">Scale Projections</div>
+          <div class="scale-row">
+            <div class="scale-item">
+              <div class="si-lbl">1K Users</div>
+              <div class="si-val" style="color:#16a34a;">$55</div>
+            </div>
+            <div class="scale-item">
+              <div class="si-lbl">10K Users</div>
+              <div class="si-val" style="color:#2563eb;">$200</div>
+            </div>
+            <div class="scale-item">
+              <div class="si-lbl">100K Users</div>
+              <div class="si-val" style="color:#ea580c;">$850</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-12-snapshots.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-10-technologies.html';
+});
+</script>
+</body>
+</html>

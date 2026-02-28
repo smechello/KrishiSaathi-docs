@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 2 — Brief About Idea / Why AI | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 56px 28px; overflow: hidden;
+  }
+
+  /* ── NAV BAR ───────────────────────────────────── */
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; transition: all 0.2s; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  /* ── BRAND HEADER ──────────────────────────────── */
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 14px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 14px; }
+  .brand-logo .icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 20px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 10px; color: #64748b; font-weight: 500; }
+  .brand-badge {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  /* ── CONTENT ───────────────────────────────────── */
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; overflow: hidden; padding: 12px 0;
+  }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #16a34a; margin-bottom: 4px;
+  }
+  .page-title {
+    font-size: 26px; font-weight: 800; color: #0f172a;
+    margin-bottom: 3px; letter-spacing: -0.5px;
+  }
+  .page-subtitle {
+    font-size: 12px; color: #64748b; margin-bottom: 18px; font-weight: 400;
+  }
+
+  /* ── HORIZONTAL LAYOUT ─────────────────────────── */
+  .idea-layout {
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Left column: The Problem + Idea */
+  .idea-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .idea-box {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+  }
+  .idea-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .ib-red::before    { background: linear-gradient(180deg, #ef4444, #dc2626); }
+  .ib-green::before  { background: linear-gradient(180deg, #16a34a, #22c55e); }
+
+  .idea-box .box-title {
+    font-size: 14px; font-weight: 800; color: #1e293b;
+    margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+  }
+  .idea-box .box-title .emoji { font-size: 18px; }
+
+  .idea-list {
+    list-style: none; padding: 0;
+  }
+  .idea-list li {
+    font-size: 12px; color: #475569; padding: 4px 0 4px 18px;
+    position: relative; line-height: 1.5;
+  }
+  .idea-list li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: #16a34a; font-weight: 700;
+  }
+  .idea-list.problems li::before { color: #ef4444; content: '✕'; }
+  .idea-list li strong { color: #1e293b; }
+
+  /* Right column: Why AI is Required */
+  .idea-right {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .why-ai-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 14px;
+    padding: 16px 20px;
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(15,23,42,0.2);
+    flex-shrink: 0;
+  }
+  .why-ai-header .wah-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #fbbf24; margin-bottom: 4px;
+  }
+  .why-ai-header .wah-title {
+    font-size: 18px; font-weight: 800; margin-bottom: 4px;
+  }
+  .why-ai-header .wah-desc {
+    font-size: 11px; color: #cbd5e1; line-height: 1.5;
+  }
+
+  /* AI Capabilities Grid */
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ai-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .ai-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .ac-green::before  { background: linear-gradient(90deg, #16a34a, #22c55e); }
+  .ac-blue::before   { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .ac-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+  .ac-amber::before  { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+  .ai-card .card-icon {
+    font-size: 22px; margin-bottom: 6px;
+  }
+  .ai-card .card-title {
+    font-size: 13px; font-weight: 700; color: #1e293b; margin-bottom: 4px;
+  }
+  .ai-card .card-desc {
+    font-size: 10.5px; color: #64748b; line-height: 1.4; flex: 1;
+  }
+  .ai-card .card-tag {
+    display: inline-block; margin-top: 6px;
+    font-size: 9px; padding: 2px 8px; border-radius: 6px; font-weight: 700;
+  }
+  .tag-bedrock  { background: #fff7ed; color: #c2410c; }
+  .tag-rag      { background: #f0fdf4; color: #15803d; }
+  .tag-polly    { background: #eff6ff; color: #1d4ed8; }
+  .tag-memory   { background: #f5f3ff; color: #6d28d9; }
+
+  /* ── BOTTOM STAT BAR ───────────────────────────── */
+  .stat-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+    flex-shrink: 0;
+  }
+  .stat-item {
+    flex: 1;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .stat-item .sv { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .sv-green  { color: #16a34a; }
+  .sv-blue   { color: #2563eb; }
+  .sv-amber  { color: #f59e0b; }
+  .sv-purple { color: #7c3aed; }
+  .sv-orange { color: #ea580c; }
+  .stat-item .sl { font-size: 10px; color: #64748b; font-weight: 600; margin-top: 1px; }
+
+  /* ── FOOTER ────────────────────────────────────── */
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-02-why-ai.html">← Prev</a>
+    <span class="current">3 / 17 — Brief About the Idea</span>
+    <a href="slide-03-aws-services.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">Slide 3 of 17</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">About the Idea</div>
+    <div class="page-title">Brief About the Idea — Why AI is Required</div>
+    <div class="page-subtitle">Bridging the agricultural knowledge gap for 120M+ Indian farmers through multi-agent AI and voice-first multilingual design</div>
+
+    <div class="idea-layout">
+      <!-- LEFT: Problem + Solution -->
+      <div class="idea-left">
+        <div class="idea-box ib-red">
+          <div class="box-title"><span class="emoji">🚨</span> The Problem</div>
+          <ul class="idea-list problems">
+            <li><strong>120M+ farmers</strong> lack timely access to expert agricultural guidance</li>
+            <li>Information on diseases, prices, schemes is <strong>fragmented across platforms</strong></li>
+            <li><strong>Language barrier</strong> — most solutions are English-only; farmers speak 22+ languages</li>
+            <li><strong>Low digital literacy</strong> — complex apps are unusable for rural farmers</li>
+            <li><strong>No personalization</strong> — generic advice ignores local soil, weather, crop context</li>
+            <li><strong>Delayed response</strong> — crop diseases spread while waiting for expert visits</li>
+          </ul>
+        </div>
+
+        <div class="idea-box ib-green">
+          <div class="box-title"><span class="emoji">💡</span> Our Solution: KrishiSaathi</div>
+          <ul class="idea-list">
+            <li><strong>Multi-Agent AI</strong> — 5 specialist agents orchestrated by a Supervisor Agent</li>
+            <li><strong>Voice-first design</strong> — speak in any Indian language, hear back in the same</li>
+            <li><strong>RAG-powered knowledge</strong> — 50K+ verified agricultural documents for accurate answers</li>
+            <li><strong>Persistent memory</strong> — remembers farmer context for personalized advice</li>
+            <li><strong>Real-time data</strong> — live weather, market prices, and scheme updates</li>
+            <li><strong>AWS-native architecture</strong> — Bedrock, Polly, Transcribe, RDS, EC2</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RIGHT: Why AI + AI Capabilities -->
+      <div class="idea-right">
+        <div class="why-ai-header">
+          <div class="wah-label">🧠 Why AI is Required</div>
+          <div class="wah-title">Traditional approaches cannot solve this at scale</div>
+          <div class="wah-desc">
+            AI enables real-time, personalized, multilingual agricultural guidance at a cost of <strong style="color:#fbbf24;">₹0.50/query</strong> vs. ₹500+ for an in-person expert visit. Multi-agent architecture provides specialized domain expertise that no single model can match. RAG ensures factual accuracy while LLMs provide natural conversation.
+          </div>
+        </div>
+
+        <div class="ai-grid">
+          <div class="ai-card ac-green">
+            <div class="card-icon">🩺</div>
+            <div class="card-title">AI Disease Diagnosis</div>
+            <div class="card-desc">Instant crop disease identification from text/images. Treatment plans with costs and recovery timelines — no waiting for expert visits.</div>
+            <span class="card-tag tag-bedrock">Bedrock Vision</span>
+          </div>
+
+          <div class="ai-card ac-blue">
+            <div class="card-icon">🗣️</div>
+            <div class="card-title">Voice AI in 12 Languages</div>
+            <div class="card-desc">Amazon Polly neural TTS + Transcribe STT enables illiterate farmers to interact naturally in their mother tongue.</div>
+            <span class="card-tag tag-polly">Polly + Transcribe</span>
+          </div>
+
+          <div class="ai-card ac-purple">
+            <div class="card-icon">🧠</div>
+            <div class="card-title">Contextual Memory</div>
+            <div class="card-desc">Mem0-inspired memory engine learns farmer's crops, location, soil type — making every interaction more personalized over time.</div>
+            <span class="card-tag tag-memory">10 Categories</span>
+          </div>
+
+          <div class="ai-card ac-amber">
+            <div class="card-icon">📚</div>
+            <div class="card-title">RAG Knowledge Base</div>
+            <div class="card-desc">50K+ verified agricultural documents across 8 specialized collections ensure factual, trustworthy recommendations.</div>
+            <span class="card-tag tag-rag">ChromaDB · 8 Collections</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="stat-bar">
+      <div class="stat-item"><div class="sv sv-green">120M+</div><div class="sl">Target Farmers</div></div>
+      <div class="stat-item"><div class="sv sv-blue">5</div><div class="sl">Specialist AI Agents</div></div>
+      <div class="stat-item"><div class="sv sv-amber">12</div><div class="sl">Indian Languages</div></div>
+      <div class="stat-item"><div class="sv sv-purple">50K+</div><div class="sl">RAG Documents</div></div>
+      <div class="stat-item"><div class="sv sv-orange">₹0.50</div><div class="sl">Cost Per Query</div></div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-03-aws-services.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-02-why-ai.html';
+});
+</script>
+</body>
+</html>

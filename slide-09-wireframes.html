@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 9 — Wireframes & Mock Diagrams | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 32px 20px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 6px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 26px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 4px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #7c3aed; margin-bottom: 2px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+
+  /* ── WIREFRAMES GRID ───────────────────── */
+  .wf-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    min-height: 0;
+  }
+  .wf-card {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+  }
+  .wf-card:hover { border-color: #7c3aed; box-shadow: 0 4px 16px rgba(124,58,237,0.12); }
+  .wf-top {
+    padding: 6px 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+  }
+  .wf-top .wf-name { font-size: 10.5px; font-weight: 700; color: #1e293b; }
+  .wf-top .wf-badge {
+    font-size: 8px; font-weight: 600; padding: 2px 8px; border-radius: 8px;
+  }
+  .wf-body { flex: 1; padding: 8px; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+
+  /* Wireframe UI Components */
+  .wf-hdr { height: 14px; border-radius: 4px; display: flex; align-items: center; padding: 0 6px; flex-shrink: 0; }
+  .wf-hdr span { font-size: 7px; color: #fff; font-weight: 600; }
+  .wf-row { display: flex; gap: 4px; flex: 1; min-height: 0; }
+  .wf-sidebar { width: 42px; background: #f8fafc; border-radius: 6px; display: flex; flex-direction: column; align-items: center; padding: 4px 2px; gap: 4px; flex-shrink: 0; }
+  .wf-sb-item { width: 28px; height: 14px; background: #e2e8f0; border-radius: 3px; }
+  .wf-sb-item.active { background: #16a34a; }
+  .wf-main { flex: 1; display: flex; flex-direction: column; gap: 3px; min-height: 0; }
+  .wf-input { height: 14px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px; padding: 0 6px; display: flex; align-items: center; flex-shrink: 0; }
+  .wf-input span { font-size: 7px; color: #94a3b8; }
+  .wf-area { flex: 1; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 3px; overflow: hidden; min-height: 0; }
+  .wf-msg { height: 12px; border-radius: 3px; }
+  .wf-msg-ai { background: #f0fdf4; width: 75%; }
+  .wf-msg-user { background: #eff6ff; width: 60%; margin-left: auto; }
+  .wf-btn { height: 12px; background: #16a34a; border-radius: 4px; width: 45px; flex-shrink: 0; }
+  .wf-upload { height: 28px; border: 1.5px dashed #cbd5e1; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .wf-upload span { font-size: 7px; color: #94a3b8; }
+  .wf-result { flex: 1; background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 4px; display: flex; flex-direction: column; gap: 2px; }
+  .wf-result-item { height: 8px; background: #fca5a5; border-radius: 2px; }
+  .wf-grid-inner { display: grid; gap: 4px; flex: 1; min-height: 0; }
+  .wf-card-inner { border: 1px solid #e2e8f0; border-radius: 6px; padding: 4px; display: flex; flex-direction: column; justify-content: space-between; }
+  .wf-card-inner .wf-ci-top { display: flex; align-items: center; gap: 3px; }
+  .wf-card-inner .wf-ci-ic { font-size: 10px; }
+  .wf-card-inner .wf-ci-nm { font-size: 7px; font-weight: 600; color: #1e293b; }
+  .wf-card-inner .wf-ci-val { font-size: 9px; font-weight: 800; }
+  .wf-card-inner .wf-ci-bar { height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
+  .wf-card-inner .wf-ci-bar span { display: block; height: 100%; border-radius: 2px; }
+  .wf-tabs { display: flex; gap: 3px; flex-shrink: 0; }
+  .wf-tab { height: 12px; padding: 0 6px; border-radius: 3px 3px 0 0; background: #f1f5f9; display: flex; align-items: center; }
+  .wf-tab.active { background: #0f172a; }
+  .wf-tab span { font-size: 6.5px; font-weight: 600; color: #64748b; }
+  .wf-tab.active span { color: #fff; }
+  .wf-table { flex: 1; display: flex; flex-direction: column; gap: 2px; min-height: 0; }
+  .wf-tr { display: flex; gap: 2px; flex-shrink: 0; }
+  .wf-td { flex: 1; height: 10px; border-radius: 2px; }
+  .wf-td-h { background: #0f172a; }
+  .wf-td-d { background: #f1f5f9; }
+  .wf-dots { display: flex; gap: 3px; align-items: center; padding: 4px 0; }
+  .wf-dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-08-architecture.html">← Prev</a>
+    <span class="current">10 / 17 — Wireframes & Mocks</span>
+    <a href="slide-10-technologies.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">📱 Wireframes</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Wireframes / Mock Diagrams</div>
+    <div class="page-title">Streamlit App UI Wireframe Mockups</div>
+    <div class="page-subtitle">6 key pages of the application — responsive, accessible, multi-language Streamlit web interface</div>
+
+    <div class="wf-grid">
+
+      <!-- 1: Chat Page -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">💬 Chat Page</div>
+          <div class="wf-badge" style="background:#eff6ff; color:#2563eb;">Primary</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#0f172a;"><span>🌾 KrishiSaathi — Chat</span></div>
+          <div class="wf-row">
+            <div class="wf-sidebar">
+              <div class="wf-sb-item active"></div>
+              <div class="wf-sb-item"></div>
+              <div class="wf-sb-item"></div>
+              <div class="wf-sb-item"></div>
+              <div class="wf-sb-item"></div>
+              <div class="wf-sb-item"></div>
+            </div>
+            <div class="wf-main">
+              <div class="wf-area">
+                <div class="wf-msg wf-msg-user"></div>
+                <div class="wf-msg wf-msg-ai"></div>
+                <div class="wf-msg wf-msg-user"></div>
+                <div class="wf-msg wf-msg-ai" style="width:85%;"></div>
+              </div>
+              <div style="display:flex; gap:3px;">
+                <div class="wf-input" style="flex:1;"><span>Type message or use mic 🎤</span></div>
+                <div class="wf-btn"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: Crop Doctor -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">🩺 Crop Doctor</div>
+          <div class="wf-badge" style="background:#fef2f2; color:#dc2626;">AI Vision</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#dc2626;"><span>🩺 Crop Disease Diagnosis</span></div>
+          <div class="wf-row">
+            <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+              <div class="wf-upload"><span>📷 Upload Crop Image</span></div>
+              <div class="wf-input"><span>Describe symptoms...</span></div>
+              <div class="wf-btn" style="width:60px; background:#dc2626;"></div>
+            </div>
+            <div class="wf-result" style="flex:1;">
+              <div style="font-size:7px; font-weight:700; color:#dc2626;">Diagnosis Result</div>
+              <div class="wf-result-item" style="width:80%;"></div>
+              <div class="wf-result-item" style="width:65%;"></div>
+              <div class="wf-result-item" style="width:90%;"></div>
+              <div class="wf-result-item" style="width:50%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3: Market Prices -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">📊 Market Prices</div>
+          <div class="wf-badge" style="background:#eff6ff; color:#2563eb;">Live Data</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#2563eb;"><span>📊 Mandi Prices & Analytics</span></div>
+          <div style="display:flex; gap:3px; flex-shrink:0;">
+            <div class="wf-input" style="flex:1;"><span>Crop name…</span></div>
+            <div class="wf-input" style="flex:1;"><span>Market…</span></div>
+          </div>
+          <div class="wf-grid-inner" style="grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(2,1fr);">
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🌾</span><span class="wf-ci-nm">Rice</span></div>
+              <div class="wf-ci-val" style="color:#16a34a;">₹2,180</div>
+              <div class="wf-ci-bar"><span style="width:80%; background:#16a34a;"></span></div>
+            </div>
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🌽</span><span class="wf-ci-nm">Wheat</span></div>
+              <div class="wf-ci-val" style="color:#2563eb;">₹2,275</div>
+              <div class="wf-ci-bar"><span style="width:68%; background:#2563eb;"></span></div>
+            </div>
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🥔</span><span class="wf-ci-nm">Cotton</span></div>
+              <div class="wf-ci-val" style="color:#ea580c;">₹6,620</div>
+              <div class="wf-ci-bar"><span style="width:92%; background:#ea580c;"></span></div>
+            </div>
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🧅</span><span class="wf-ci-nm">Onion</span></div>
+              <div class="wf-ci-val" style="color:#7c3aed;">₹1,850</div>
+              <div class="wf-ci-bar"><span style="width:55%; background:#7c3aed;"></span></div>
+            </div>
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🍅</span><span class="wf-ci-nm">Tomato</span></div>
+              <div class="wf-ci-val" style="color:#e11d48;">₹2,450</div>
+              <div class="wf-ci-bar"><span style="width:73%; background:#e11d48;"></span></div>
+            </div>
+            <div class="wf-card-inner">
+              <div class="wf-ci-top"><span class="wf-ci-ic">🌶️</span><span class="wf-ci-nm">Chilli</span></div>
+              <div class="wf-ci-val" style="color:#0891b2;">₹8,500</div>
+              <div class="wf-ci-bar"><span style="width:96%; background:#0891b2;"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4: Government Schemes -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">🏛️ Government Schemes</div>
+          <div class="wf-badge" style="background:#f5f3ff; color:#7c3aed;">Database</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#7c3aed;"><span>🏛️ Govt Schemes Finder</span></div>
+          <div class="wf-input"><span>Search schemes by crop, state, category…</span></div>
+          <div class="wf-table">
+            <div class="wf-tr"><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h" style="flex:0.5;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.5; background:#dcfce7; border-radius:2px;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.5; background:#dbeafe; border-radius:2px;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.5; background:#dcfce7; border-radius:2px;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.5; background:#fef9c3; border-radius:2px;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5: Weather -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">🌦️ Weather & Forecast</div>
+          <div class="wf-badge" style="background:#fffbeb; color:#d97706;">Live</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#d97706;"><span>🌦️ Weather Intelligence</span></div>
+          <div class="wf-input"><span>Enter city or coordinates…</span></div>
+          <div style="display:flex; gap:4px; flex:1; min-height:0;">
+            <div style="flex:1; background:#fffbeb; border-radius:6px; padding:6px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <div style="font-size:24px;">☀️</div>
+              <div style="font-size:14px; font-weight:800; color:#d97706;">32°C</div>
+              <div style="font-size:7px; color:#92400e;">Partly Cloudy</div>
+              <div style="font-size:7px; color:#92400e;">Humidity: 65%</div>
+            </div>
+            <div style="flex:1.5; display:flex; flex-direction:column; gap:3px;">
+              <div style="font-size:7px; font-weight:700; color:#64748b;">5-DAY FORECAST</div>
+              <div class="wf-dots">
+                <div class="wf-dot" style="background:#fbbf24;"></div><span style="font-size:7px; color:#64748b;">Mon 34°</span>
+                <div class="wf-dot" style="background:#f59e0b;"></div><span style="font-size:7px; color:#64748b;">Tue 31°</span>
+              </div>
+              <div class="wf-dots">
+                <div class="wf-dot" style="background:#60a5fa;"></div><span style="font-size:7px; color:#64748b;">Wed 28°</span>
+                <div class="wf-dot" style="background:#38bdf8;"></div><span style="font-size:7px; color:#64748b;">Thu 29°</span>
+              </div>
+              <div class="wf-dots">
+                <div class="wf-dot" style="background:#fbbf24;"></div><span style="font-size:7px; color:#64748b;">Fri 33°</span>
+              </div>
+              <div style="font-size:7px; font-weight:700; color:#16a34a; margin-top: auto;">🌱 Farming Advisory: Ideal for sowing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6: Admin Panel -->
+      <div class="wf-card">
+        <div class="wf-top">
+          <div class="wf-name">⚙️ Admin Dashboard</div>
+          <div class="wf-badge" style="background:#f8fafc; color:#0f172a;">8 Tabs</div>
+        </div>
+        <div class="wf-body">
+          <div class="wf-hdr" style="background:#0f172a;"><span>⚙️ Admin Control Panel</span></div>
+          <div class="wf-tabs">
+            <div class="wf-tab active"><span>Users</span></div>
+            <div class="wf-tab"><span>LLM</span></div>
+            <div class="wf-tab"><span>DB</span></div>
+            <div class="wf-tab"><span>RAG</span></div>
+            <div class="wf-tab"><span>API</span></div>
+            <div class="wf-tab"><span>Logs</span></div>
+            <div class="wf-tab"><span>Email</span></div>
+            <div class="wf-tab"><span>Voice</span></div>
+          </div>
+          <div class="wf-table" style="flex:1;">
+            <div class="wf-tr"><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h"></div><div class="wf-td wf-td-h" style="flex:0.4;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.4; background:#dcfce7; border-radius:2px;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.4; background:#fef9c3; border-radius:2px;"></div></div>
+            <div class="wf-tr"><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td wf-td-d"></div><div class="wf-td" style="flex:0.4; background:#dcfce7; border-radius:2px;"></div></div>
+          </div>
+          <div style="display:flex; gap:4px; flex-shrink:0;">
+            <div style="flex:1; height:12px; background:#dcfce7; border-radius:3px;"></div>
+            <div style="flex:1; height:12px; background:#dbeafe; border-radius:3px;"></div>
+            <div style="flex:1; height:12px; background:#fef9c3; border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-10-technologies.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-08-architecture.html';
+});
+</script>
+</body>
+</html>

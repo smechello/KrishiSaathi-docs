@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 1 — Title Slide | KrishiSaathi</title>
+<style>
+  /* ── RESET & VIEWPORT FIT ──────────────────────── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SLIDE CONTAINER ───────────────────────────── */
+  .slide {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 36px 56px 28px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── DECORATIVE BACKGROUND ─────────────────────── */
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(22,163,74,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .slide::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(37,99,235,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── NAVIGATION ────────────────────────────────── */
+  .nav-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #0f172a;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 24px;
+    font-size: 11px;
+    z-index: 100;
+  }
+  .nav-bar a {
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-weight: 600;
+  }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  /* ── BRAND HEADER ──────────────────────────────── */
+  .brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0;
+    margin-top: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-logo .icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+  }
+  .brand-logo .text .tagline {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .brand-badge {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* ── MAIN CONTENT ──────────────────────────────── */
+  .content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .title-layout {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* Left: Main Title */
+  .title-left {
+    flex: 1.2;
+  }
+  .hackathon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #fff7ed, #ffedd5);
+    border: 1.5px solid #fed7aa;
+    color: #c2410c;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .main-title {
+    font-size: 52px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    margin-bottom: 10px;
+  }
+  .main-title .highlight {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: #64748b;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+
+  /* Problem Statement Box */
+  .problem-box {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 16px;
+    padding: 20px 24px;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.25);
+  }
+  .problem-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fbbf24;
+    margin-bottom: 8px;
+  }
+  .problem-text {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #e2e8f0;
+  }
+  .problem-text strong {
+    color: #fff;
+  }
+
+  /* Right: Info Cards */
+  .title-right {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .info-card {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: all 0.2s;
+  }
+  .info-card:hover {
+    border-color: #16a34a;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.1);
+  }
+  .info-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .ic-green  { background: #f0fdf4; }
+  .ic-blue   { background: #eff6ff; }
+  .ic-purple { background: #f5f3ff; }
+  .ic-amber  { background: #fffbeb; }
+  .ic-orange { background: #fff7ed; }
+
+  .info-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+  .info-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+  .info-sub {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  /* ── TECH BADGES ROW ───────────────────────────── */
+  .tech-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .tech-badge {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tech-badge.aws {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #c2410c;
+  }
+
+  /* ── FOOTER ────────────────────────────────────── */
+/* ── KEYBOARD NAV ──────────────────────────────── */
+</style>
+</head>
+<body>
+
+<!-- ── NAV BAR ────────────────────────────────────── -->
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <span class="current">1 / 17 — Title Slide</span>
+    <a href="slide-02-why-ai.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence Platform</div>
+      </div>
+    </div>
+    <div class="brand-badge">AWS AI for Bharat Hackathon 2026</div>
+  </div>
+
+  <!-- ── CONTENT ─────────────────────────────────── -->
+  <div class="content">
+    <div class="title-layout">
+
+      <!-- LEFT: Title & Problem -->
+      <div class="title-left">
+        <div class="hackathon-badge">☁️ AWS AI for Bharat Hackathon 2026</div>
+
+        <div class="main-title">
+          <span class="highlight">KrishiSaathi</span><br>
+          AI Farming Assistant
+        </div>
+
+        <div class="subtitle">
+          Multi-agent intelligence platform empowering 120M+ Indian farmers
+          with expert agricultural guidance in 12 Indian languages
+        </div>
+
+        <!-- Problem Statement -->
+        <div class="problem-box">
+          <div class="problem-label">⚡ Problem Statement</div>
+          <div class="problem-text">
+            <strong>120M+ Indian farmers</strong> lack timely access to expert agricultural guidance.
+            Information on crop diseases, market prices, government schemes, weather advisories,
+            and soil health is <strong>fragmented across languages and platforms</strong>.
+            Existing tools fail to serve vernacular-speaking, low-literacy farmers who rely on voice.
+          </div>
+        </div>
+
+        <!-- Tech Badges -->
+        <div class="tech-badges">
+          <span class="tech-badge aws">☁️ Amazon Bedrock</span>
+          <span class="tech-badge aws">🎤 Polly + Transcribe</span>
+          <span class="tech-badge aws">🗄️ Amazon RDS</span>
+          <span class="tech-badge aws">☁️ EC2 ap-south-1</span>
+          <span class="tech-badge">🧠 Multi-Agent AI</span>
+          <span class="tech-badge">🗣️ 12 Languages</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Team Info -->
+      <div class="title-right">
+        <div class="info-card">
+          <div class="info-icon ic-green">👤</div>
+          <div>
+            <div class="info-label">Team Leader</div>
+            <div class="info-value">Shashidhar Reddy Nalamari</div>
+            <div class="info-sub">Team of 4 Developers</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon ic-blue">👥</div>
+          <div>
+            <div class="info-label">Team Name</div>
+            <div class="info-value">KrishiSaathi</div>
+            <div class="info-sub">Team of 4 · Full-Stack AI</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon ic-orange">☁️</div>
+          <div>
+            <div class="info-label">Primary AWS Services</div>
+            <div class="info-value">Bedrock · Polly · Transcribe · RDS · EC2</div>
+            <div class="info-sub">Region: ap-south-1 (Mumbai)</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon ic-purple">🎯</div>
+          <div>
+            <div class="info-label">Solution</div>
+            <div class="info-value">Voice-First Multi-Agent AI</div>
+            <div class="info-sub">5 Specialist Agents · RAG · 50K+ Docs</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon ic-amber">🌐</div>
+          <div>
+            <div class="info-label">Live Prototype</div>
+            <div class="info-value">https://krishisaathi.shashi.engineer</div>
+            <div class="info-sub">Deployed on AWS EC2 Mumbai</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── FOOTER ──────────────────────────────────── -->
+</div>
+
+<!-- Keyboard navigation -->
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-02-why-ai.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'index.html';
+});
+</script>
+
+</body>
+</html>

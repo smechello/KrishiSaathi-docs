@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 3 — AWS Services | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 48px 24px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 11px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 20px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 10px; color: #64748b; }
+  .brand-badge {
+    background: #fff7ed; border: 1px solid #fed7aa; color: #c2410c;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 10px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #ea580c; margin-bottom: 3px;
+  }
+  .page-title { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 2px; letter-spacing: -0.5px; }
+  .page-subtitle { font-size: 11px; color: #64748b; margin-bottom: 14px; }
+
+  /* ── HORIZONTAL AWS FLOW ───────────────────────── */
+  .aws-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .aws-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 8px;
+    position: relative;
+  }
+  .aws-column::after {
+    content: '→';
+    position: absolute;
+    right: -8px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #cbd5e1;
+    font-weight: 800;
+    z-index: 2;
+  }
+  .aws-column:last-child::after { display: none; }
+
+  .col-header {
+    text-align: center;
+    padding: 10px 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .col-header .ch-icon { font-size: 20px; margin-bottom: 2px; }
+  .col-header .ch-title { font-size: 12px; font-weight: 800; }
+  .col-header .ch-sub { font-size: 9px; opacity: 0.8; margin-top: 1px; }
+
+  .ch-orange { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; }
+  .ch-blue   { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; }
+  .ch-green  { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; }
+  .ch-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; }
+  .ch-slate  { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; }
+
+  /* Service cards inside columns */
+  .svc-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+  }
+  .svc-card:hover {
+    border-color: #f97316;
+    box-shadow: 0 2px 8px rgba(249,115,22,0.1);
+  }
+  .svc-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .si-orange { background: #fff7ed; }
+  .si-blue   { background: #eff6ff; }
+  .si-green  { background: #f0fdf4; }
+  .si-purple { background: #f5f3ff; }
+  .si-amber  { background: #fffbeb; }
+  .si-slate  { background: #f8fafc; }
+
+  .svc-info { flex: 1; min-width: 0; }
+  .svc-name { font-size: 12px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+  .svc-detail { font-size: 9.5px; color: #64748b; line-height: 1.4; }
+  .svc-tag {
+    display: inline-block; margin-top: 4px;
+    font-size: 8px; padding: 1px 6px; border-radius: 4px; font-weight: 700;
+    background: #fff7ed; color: #c2410c;
+  }
+
+  /* ── BOTTOM SUMMARY ────────────────────────────── */
+  .aws-summary {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-shrink: 0;
+  }
+  .aws-stat {
+    flex: 1;
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+    border-radius: 10px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .aws-stat .as-val { font-size: 18px; font-weight: 800; color: #c2410c; }
+  .aws-stat .as-lbl { font-size: 9px; color: #9a3412; font-weight: 600; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-02-idea.html">← Prev</a>
+    <span class="current">4 / 17 — AWS Services</span>
+    <a href="slide-04-ai-value.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">☁️ AWS Architecture</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">AWS Integration</div>
+    <div class="page-title">How AWS Services are Used Within Our Architecture</div>
+    <div class="page-subtitle">End-to-end AWS-native pipeline: from farmer voice input to intelligent multi-agent response — all running in ap-south-1 (Mumbai)</div>
+
+    <!-- HORIZONTAL FLOW: 5 COLUMNS -->
+    <div class="aws-flow">
+
+      <!-- Column 1: Input Layer -->
+      <div class="aws-column">
+        <div class="col-header ch-blue">
+          <div class="ch-icon">🎤</div>
+          <div class="ch-title">Input Layer</div>
+          <div class="ch-sub">Voice & Text Ingestion</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">🎤</div>
+          <div class="svc-info">
+            <div class="svc-name">Amazon Transcribe</div>
+            <div class="svc-detail">Speech-to-text for 10 Indian languages. Real-time streaming transcription via Transcribe API.</div>
+            <span class="svc-tag">STT · 10 Languages</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-green">🌐</div>
+          <div class="svc-info">
+            <div class="svc-name">Translation Engine</div>
+            <div class="svc-detail">deep-translator auto-translates 12 Indian languages to English. Unicode script detection for language ID.</div>
+            <span class="svc-tag">12 Languages</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-blue">💬</div>
+          <div class="svc-info">
+            <div class="svc-name">Streamlit Frontend</div>
+            <div class="svc-detail">7-page web app on EC2. Voice recorder widget, chat UI, admin dashboard.</div>
+            <span class="svc-tag">Port 8501</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 2: AI Intelligence -->
+      <div class="aws-column">
+        <div class="col-header ch-orange">
+          <div class="ch-icon">🧠</div>
+          <div class="ch-title">AI Intelligence</div>
+          <div class="ch-sub">Amazon Bedrock</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">⭐</div>
+          <div class="svc-info">
+            <div class="svc-name">Claude 3.5 Sonnet</div>
+            <div class="svc-detail">Primary agent model for complex reasoning, domain expertise, crop disease image analysis via Bedrock.</div>
+            <span class="svc-tag">Agent + Vision</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">⚡</div>
+          <div class="svc-info">
+            <div class="svc-name">Claude 3 Haiku</div>
+            <div class="svc-detail">Lightweight model for intent classification and response synthesis. Fast + cost-effective.</div>
+            <span class="svc-tag">Classifier + Synthesis</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-amber">🔄</div>
+          <div class="svc-info">
+            <div class="svc-name">Triple-Backend Failover</div>
+            <div class="svc-detail">Bedrock → Groq → Gemini auto-failover with exponential backoff. 99.9% availability.</div>
+            <span class="svc-tag">High Availability</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 3: Multi-Agent System -->
+      <div class="aws-column">
+        <div class="col-header ch-green">
+          <div class="ch-icon">🤖</div>
+          <div class="ch-title">Multi-Agent</div>
+          <div class="ch-sub">5 Specialist Agents</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-green">🩺</div>
+          <div class="svc-info">
+            <div class="svc-name">Crop Doctor Agent</div>
+            <div class="svc-detail">Disease diagnosis from text/images. RAG over crop_diseases & farming_practices collections.</div>
+            <span class="svc-tag">Bedrock Vision</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-blue">📊</div>
+          <div class="svc-info">
+            <div class="svc-name">Market + Scheme Agents</div>
+            <div class="svc-detail">Real-time mandi prices, 7000+ markets. 200+ govt scheme eligibility checker.</div>
+            <span class="svc-tag">RAG · market_data</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-amber">🌦️</div>
+          <div class="svc-info">
+            <div class="svc-name">Weather + Soil Agents</div>
+            <div class="svc-detail">OpenWeatherMap API integration. Soil analysis, NPK calculator, crop rotation advice.</div>
+            <span class="svc-tag">Live API + RAG</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 4: Data & Knowledge -->
+      <div class="aws-column">
+        <div class="col-header ch-purple">
+          <div class="ch-icon">📚</div>
+          <div class="ch-title">Data Layer</div>
+          <div class="ch-sub">Storage & Knowledge</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">🗄️</div>
+          <div class="svc-info">
+            <div class="svc-name">Amazon RDS PostgreSQL</div>
+            <div class="svc-detail">7 tables: profiles, chat_history, memories, telegram_users, email verifications, password resets, admin settings.</div>
+            <span class="svc-tag">Managed · SSL · Auto-backup</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-purple">🔍</div>
+          <div class="svc-info">
+            <div class="svc-name">ChromaDB RAG</div>
+            <div class="svc-detail">8 vector collections, 50K+ agricultural documents. gemini-embedding-001 embeddings.</div>
+            <span class="svc-tag">8 Collections · 50K+ Docs</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">🪣</div>
+          <div class="svc-info">
+            <div class="svc-name">Amazon S3</div>
+            <div class="svc-detail">Temporary voice file storage bucket for Transcribe processing. Auto-cleanup policy.</div>
+            <span class="svc-tag">krishisaathi-voice-temp</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Column 5: Output & Infra -->
+      <div class="aws-column">
+        <div class="col-header ch-slate">
+          <div class="ch-icon">🔊</div>
+          <div class="ch-title">Output & Infra</div>
+          <div class="ch-sub">Response Delivery</div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">🔊</div>
+          <div class="svc-info">
+            <div class="svc-name">Amazon Polly</div>
+            <div class="svc-detail">Neural TTS with Kajal voice for Hindi & English. Neural quality speech for natural interaction.</div>
+            <span class="svc-tag">Neural · en-IN / hi-IN</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-orange">☁️</div>
+          <div class="svc-info">
+            <div class="svc-name">Amazon EC2</div>
+            <div class="svc-detail">Ubuntu instance in ap-south-1 (Mumbai). Hosts Streamlit app, backend, ChromaDB.</div>
+            <span class="svc-tag">krishisaathi.shashi.engineer</span>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-icon si-slate">🔐</div>
+          <div class="svc-info">
+            <div class="svc-name">IAM + Security</div>
+            <div class="svc-detail">Least-privilege IAM roles. bcrypt password hashing + JWT HS256 tokens. SSL database.</div>
+            <span class="svc-tag">Least Privilege</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Summary Stats -->
+    <div class="aws-summary">
+      <div class="aws-stat"><div class="as-val">6</div><div class="as-lbl">AWS Services Used</div></div>
+      <div class="aws-stat"><div class="as-val">ap-south-1</div><div class="as-lbl">Mumbai Region</div></div>
+      <div class="aws-stat"><div class="as-val">3</div><div class="as-lbl">Bedrock Models</div></div>
+      <div class="aws-stat"><div class="as-val">10</div><div class="as-lbl">Transcribe Languages</div></div>
+      <div class="aws-stat"><div class="as-val">7</div><div class="as-lbl">RDS Tables</div></div>
+      <div class="aws-stat"><div class="as-val">99.9%</div><div class="as-lbl">Target Uptime</div></div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-04-ai-value.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-02-idea.html';
+});
+</script>
+</body>
+</html>

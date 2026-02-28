@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 10 — Technologies Utilized | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 36px 20px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 6px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 26px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 4px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #2563eb; margin-bottom: 2px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+
+  /* ── TECH GRID ───────────────────── */
+  .tech-layout {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    min-height: 0;
+  }
+  /* Left categories panel */
+  .cat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+  }
+  .cat-box {
+    flex: 1;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .cat-hdr {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 6px; flex-shrink: 0;
+  }
+  .cat-hdr .cat-ico {
+    width: 24px; height: 24px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; background: rgba(255,255,255,0.25);
+  }
+  .cat-hdr .cat-nm { font-size: 11px; font-weight: 800; color: #fff; }
+  .cat-items { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; align-content: flex-start; overflow: hidden; }
+  .cat-item {
+    background: rgba(255,255,255,0.9);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex; align-items: center; gap: 4px;
+    white-space: nowrap;
+  }
+  .cat-item .ci-tag {
+    font-size: 7px; font-weight: 700; text-transform: uppercase;
+    padding: 1px 4px; border-radius: 3px; color: #fff;
+  }
+
+  .bg-aws     { background: linear-gradient(135deg, #ea580c, #c2410c); }
+  .bg-ai      { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+  .bg-lang    { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+  .bg-db      { background: linear-gradient(135deg, #0891b2, #0e7490); }
+  .bg-front   { background: linear-gradient(135deg, #e11d48, #be123c); }
+  .bg-infra   { background: linear-gradient(135deg, #0f172a, #334155); }
+
+  /* Right: Stats + summary panel */
+  .right-panel {
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 0;
+    flex-shrink: 0;
+  }
+  .stats-card {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    flex-shrink: 0;
+  }
+  .stats-card .sc-title { font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .stat-item {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 8px;
+    text-align: center;
+  }
+  .stat-item .si-val { font-size: 16px; font-weight: 800; }
+  .stat-item .si-lbl { font-size: 8px; color: #64748b; }
+  .lang-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    flex: 1;
+    align-content: flex-start;
+    overflow: hidden;
+  }
+  .lang-chip {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 4px 6px;
+    text-align: center;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+  .lang-chip .lc-fl { font-size: 11px; }
+  .lang-chip .lc-nm { display: block; font-size: 7.5px; color: #64748b; }
+  .llm-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-height: 0;
+  }
+  .llm-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 8px;
+    flex-shrink: 0;
+  }
+  .llm-item .li-rank {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800; color: #fff; flex-shrink: 0;
+  }
+  .llm-item .li-info .li-nm { font-size: 10px; font-weight: 700; color: #1e293b; }
+  .llm-item .li-info .li-dt { font-size: 8px; color: #64748b; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-09-wireframes.html">← Prev</a>
+    <span class="current">11 / 17 — Technologies Utilized</span>
+    <a href="slide-11-cost.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">🛠️ Tech Stack</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Technologies Utilized</div>
+    <div class="page-title">Full Technology Stack & Services</div>
+    <div class="page-subtitle">30+ technologies across 6 layers — AWS-first with multi-cloud AI failover</div>
+
+    <div class="tech-layout">
+      <div class="cat-panel">
+        <!-- Row 1 -->
+        <div style="display:flex; gap:6px; flex:1; min-height:0;">
+          <div class="cat-box bg-aws" style="flex:1.2;">
+            <div class="cat-hdr">
+              <div class="cat-ico">☁️</div>
+              <div class="cat-nm">AWS Services</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">Amazon Bedrock <span class="ci-tag" style="background:#ea580c;">AI</span></div>
+              <div class="cat-item">Amazon Polly <span class="ci-tag" style="background:#ea580c;">TTS</span></div>
+              <div class="cat-item">Amazon Transcribe <span class="ci-tag" style="background:#ea580c;">STT</span></div>
+              <div class="cat-item">Amazon RDS <span class="ci-tag" style="background:#ea580c;">DB</span></div>
+              <div class="cat-item">Amazon EC2 <span class="ci-tag" style="background:#ea580c;">Host</span></div>
+              <div class="cat-item">Amazon S3 <span class="ci-tag" style="background:#ea580c;">Store</span></div>
+              <div class="cat-item">AWS IAM <span class="ci-tag" style="background:#ea580c;">Auth</span></div>
+            </div>
+          </div>
+          <div class="cat-box bg-ai" style="flex:1;">
+            <div class="cat-hdr">
+              <div class="cat-ico">🧠</div>
+              <div class="cat-nm">AI / ML</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">Claude 3.5 Sonnet <span class="ci-tag" style="background:#7c3aed;">LLM</span></div>
+              <div class="cat-item">Claude 3 Haiku <span class="ci-tag" style="background:#7c3aed;">LLM</span></div>
+              <div class="cat-item">Llama 3.3 70B <span class="ci-tag" style="background:#7c3aed;">Alt</span></div>
+              <div class="cat-item">Gemini 2.0 Flash <span class="ci-tag" style="background:#7c3aed;">Alt</span></div>
+              <div class="cat-item">ChromaDB <span class="ci-tag" style="background:#7c3aed;">RAG</span></div>
+              <div class="cat-item">Gemini Embed <span class="ci-tag" style="background:#7c3aed;">Vec</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div style="display:flex; gap:6px; flex:1; min-height:0;">
+          <div class="cat-box bg-lang">
+            <div class="cat-hdr">
+              <div class="cat-ico">🌐</div>
+              <div class="cat-nm">Language & Voice</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">deep-translator <span class="ci-tag" style="background:#2563eb;">i18n</span></div>
+              <div class="cat-item">gTTS <span class="ci-tag" style="background:#2563eb;">TTS</span></div>
+              <div class="cat-item">SpeechRecognition <span class="ci-tag" style="background:#2563eb;">STT</span></div>
+              <div class="cat-item">pydub <span class="ci-tag" style="background:#2563eb;">Aud</span></div>
+              <div class="cat-item">Unicode Script <span class="ci-tag" style="background:#2563eb;">Det</span></div>
+            </div>
+          </div>
+          <div class="cat-box bg-db">
+            <div class="cat-hdr">
+              <div class="cat-ico">🗄️</div>
+              <div class="cat-nm">Database & Storage</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">PostgreSQL 16 <span class="ci-tag" style="background:#0891b2;">RDS</span></div>
+              <div class="cat-item">psycopg2 <span class="ci-tag" style="background:#0891b2;">Drv</span></div>
+              <div class="cat-item">ChromaDB <span class="ci-tag" style="background:#0891b2;">Vec</span></div>
+              <div class="cat-item">S3 Bucket <span class="ci-tag" style="background:#0891b2;">Obj</span></div>
+              <div class="cat-item">JSON Files <span class="ci-tag" style="background:#0891b2;">Cfg</span></div>
+            </div>
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div style="display:flex; gap:6px; flex:1; min-height:0;">
+          <div class="cat-box bg-front">
+            <div class="cat-hdr">
+              <div class="cat-ico">🖥️</div>
+              <div class="cat-nm">Frontend & UX</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">Streamlit <span class="ci-tag" style="background:#e11d48;">UI</span></div>
+              <div class="cat-item">Plotly <span class="ci-tag" style="background:#e11d48;">Viz</span></div>
+              <div class="cat-item">st-audiorec <span class="ci-tag" style="background:#e11d48;">Mic</span></div>
+              <div class="cat-item">Custom CSS <span class="ci-tag" style="background:#e11d48;">Style</span></div>
+              <div class="cat-item">Telegram Bot <span class="ci-tag" style="background:#e11d48;">Chat</span></div>
+            </div>
+          </div>
+          <div class="cat-box bg-infra">
+            <div class="cat-hdr">
+              <div class="cat-ico">⚙️</div>
+              <div class="cat-nm">Infrastructure & Auth</div>
+            </div>
+            <div class="cat-items">
+              <div class="cat-item">bcrypt <span class="ci-tag" style="background:#475569;">Hash</span></div>
+              <div class="cat-item">PyJWT <span class="ci-tag" style="background:#475569;">JWT</span></div>
+              <div class="cat-item">boto3 <span class="ci-tag" style="background:#475569;">SDK</span></div>
+              <div class="cat-item">Nginx <span class="ci-tag" style="background:#475569;">Rev</span></div>
+              <div class="cat-item">Gmail SMTP <span class="ci-tag" style="background:#475569;">Mail</span></div>
+              <div class="cat-item">dotenv <span class="ci-tag" style="background:#475569;">Env</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Stats + LLM Stack + Languages -->
+      <div class="right-panel">
+        <div class="stats-card">
+          <div class="sc-title">Tech Statistics</div>
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="si-val" style="color:#ea580c;">7</div>
+              <div class="si-lbl">AWS Services</div>
+            </div>
+            <div class="stat-item">
+              <div class="si-val" style="color:#7c3aed;">4</div>
+              <div class="si-lbl">LLM Models</div>
+            </div>
+            <div class="stat-item">
+              <div class="si-val" style="color:#2563eb;">12</div>
+              <div class="si-lbl">Languages</div>
+            </div>
+            <div class="stat-item">
+              <div class="si-val" style="color:#16a34a;">30+</div>
+              <div class="si-lbl">Total Libraries</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-card" style="flex:1; display:flex; flex-direction:column; min-height:0;">
+          <div class="sc-title">Triple LLM Failover Stack</div>
+          <div class="llm-stack">
+            <div class="llm-item">
+              <div class="li-rank" style="background:#ea580c;">1</div>
+              <div class="li-info">
+                <div class="li-nm">Amazon Bedrock</div>
+                <div class="li-dt">Claude 3.5 Sonnet + 3 Haiku · Primary</div>
+              </div>
+            </div>
+            <div class="llm-item">
+              <div class="li-rank" style="background:#7c3aed;">2</div>
+              <div class="li-info">
+                <div class="li-nm">Groq Cloud</div>
+                <div class="li-dt">Llama 3.3 70B / 3.1 8B · Fallback</div>
+              </div>
+            </div>
+            <div class="llm-item">
+              <div class="li-rank" style="background:#2563eb;">3</div>
+              <div class="li-info">
+                <div class="li-nm">Google Gemini</div>
+                <div class="li-dt">2.0 Flash / Flash Lite · Safety net</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-card" style="flex:1; display:flex; flex-direction:column; min-height:0;">
+          <div class="sc-title">Supported Languages</div>
+          <div class="lang-grid">
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> English<span class="lc-nm">en</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Hindi<span class="lc-nm">hi</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Telugu<span class="lc-nm">te</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Tamil<span class="lc-nm">ta</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Kannada<span class="lc-nm">kn</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Malayalam<span class="lc-nm">ml</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Marathi<span class="lc-nm">mr</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Bengali<span class="lc-nm">bn</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Gujarati<span class="lc-nm">gu</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Punjabi<span class="lc-nm">pa</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Odia<span class="lc-nm">or</span></div>
+            <div class="lang-chip"><span class="lc-fl">🇮🇳</span> Assamese<span class="lc-nm">as</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-11-cost.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-09-wireframes.html';
+});
+</script>
+</body>
+</html>

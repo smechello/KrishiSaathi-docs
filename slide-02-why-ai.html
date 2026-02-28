@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 2 — Why AI is Required | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 56px 24px; overflow: hidden;
+  }
+
+  /* ── NAV BAR ───────────────────────────────────── */
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; transition: all 0.2s; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  /* ── BRAND HEADER ──────────────────────────────── */
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 14px; }
+  .brand-logo .icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 19px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 10px; color: #64748b; font-weight: 500; }
+  .brand-badge {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  /* ── CONTENT ───────────────────────────────────── */
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 10px 0 0;
+  }
+
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #dc2626; margin-bottom: 2px;
+  }
+  .page-title {
+    font-size: 24px; font-weight: 800; color: #0f172a;
+    margin-bottom: 2px; letter-spacing: -0.5px;
+  }
+  .page-subtitle {
+    font-size: 11.5px; color: #64748b; margin-bottom: 14px; font-weight: 400; line-height: 1.4;
+  }
+
+  /* ── HERO THESIS ───────────────────────────────── */
+  .thesis-strip {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #16a34a 100%);
+    border-radius: 14px;
+    padding: 16px 24px;
+    display: flex; align-items: center; gap: 24px;
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(15,23,42,0.25);
+    flex-shrink: 0;
+    margin-bottom: 14px;
+  }
+  .thesis-icon { font-size: 36px; flex-shrink: 0; }
+  .thesis-text .tt-main {
+    font-size: 16px; font-weight: 800; margin-bottom: 3px;
+  }
+  .thesis-text .tt-sub {
+    font-size: 11px; color: #cbd5e1; line-height: 1.5;
+  }
+  .thesis-text .tt-sub strong { color: #fbbf24; }
+  .thesis-stat {
+    flex-shrink: 0; text-align: center;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding-left: 24px;
+  }
+  .thesis-stat .ts-val { font-size: 28px; font-weight: 900; color: #fbbf24; }
+  .thesis-stat .ts-lbl { font-size: 9px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── COMPARISON COLUMNS ────────────────────────── */
+  .comparison {
+    display: flex; gap: 16px;
+    flex: 1; min-height: 0;
+  }
+
+  .comp-col {
+    flex: 1;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .col-without {
+    background: #fef2f2; border: 2px solid #fecaca;
+  }
+  .col-with {
+    background: #f0fdf4; border: 2px solid #bbf7d0;
+  }
+  .comp-col .col-header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+  }
+  .comp-col .col-icon { font-size: 20px; }
+  .comp-col .col-title { font-size: 14px; font-weight: 800; }
+  .col-without .col-title { color: #dc2626; }
+  .col-with .col-title { color: #16a34a; }
+
+  .comp-list {
+    list-style: none; padding: 0; flex: 1; overflow-y: auto;
+  }
+  .comp-list li {
+    font-size: 11.5px; color: #374151; padding: 5px 0 5px 20px;
+    position: relative; line-height: 1.45;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+  }
+  .comp-list li:last-child { border-bottom: none; }
+  .comp-list li::before {
+    position: absolute; left: 0; font-weight: 700; font-size: 12px;
+  }
+  .col-without .comp-list li::before { content: '✕'; color: #ef4444; }
+  .col-with .comp-list li::before { content: '✓'; color: #16a34a; }
+  .comp-list li strong { color: #0f172a; }
+
+  /* ── AI NECESSITY MATRIX ───────────────────────── */
+  .col-center {
+    flex: 1.3;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .center-title {
+    font-size: 11px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #0f172a; text-align: center;
+    margin-bottom: 2px;
+  }
+  .necessity-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; flex: 1; min-height: 0;
+  }
+  .nec-card {
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .nec-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .nc-red::before    { background: linear-gradient(90deg, #dc2626, #ef4444); }
+  .nc-blue::before   { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .nc-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+  .nc-amber::before  { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+  .nec-card .nc-head {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
+  }
+  .nec-card .nc-icon { font-size: 16px; }
+  .nec-card .nc-title { font-size: 12px; font-weight: 700; color: #1e293b; }
+  .nec-card .nc-reason {
+    font-size: 10px; color: #64748b; line-height: 1.4; flex: 1;
+  }
+  .nec-card .nc-tag {
+    display: inline-block; margin-top: 4px;
+    font-size: 8.5px; padding: 2px 7px; border-radius: 5px; font-weight: 700;
+  }
+  .ntag-scale   { background: #fef2f2; color: #dc2626; }
+  .ntag-speed   { background: #eff6ff; color: #1d4ed8; }
+  .ntag-lang    { background: #f5f3ff; color: #6d28d9; }
+  .ntag-context { background: #fff7ed; color: #c2410c; }
+
+  /* ── BOTTOM STAT BAR ───────────────────────────── */
+  .stat-bar {
+    display: flex; gap: 10px;
+    margin-top: 12px; flex-shrink: 0;
+  }
+  .stat-item {
+    flex: 1; background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px; padding: 8px 12px; text-align: center;
+  }
+  .stat-item .sv { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .sv-red    { color: #dc2626; }
+  .sv-green  { color: #16a34a; }
+  .sv-blue   { color: #2563eb; }
+  .sv-amber  { color: #f59e0b; }
+  .sv-purple { color: #7c3aed; }
+  .stat-item .sl { font-size: 9px; color: #64748b; font-weight: 600; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-01-title.html">← Prev</a>
+    <span class="current">2 / 17 — Why AI is Required</span>
+    <a href="slide-02-idea.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">Slide 2 of 17</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Core Requirement</div>
+    <div class="page-title">Why AI is Required in Our Solution</div>
+    <div class="page-subtitle">AI isn't an add-on — it is the fundamental enabler. Without AI, this problem is unsolvable at India's scale.</div>
+
+    <!-- THESIS STRIP -->
+    <div class="thesis-strip">
+      <div class="thesis-icon">🧠</div>
+      <div class="thesis-text">
+        <div class="tt-main">India has 120M+ farmers but only ~67,000 agricultural scientists</div>
+        <div class="tt-sub">That's <strong>1 expert per 1,800 farmers</strong>. Physical expert visits cost ₹500+ and take days. Meanwhile, crop diseases spread in <strong>24–48 hours</strong>. Only AI can deliver instant, expert-quality, multilingual guidance at ₹0.50/query — a <strong>1,000× cost reduction</strong>.</div>
+      </div>
+      <div class="thesis-stat">
+        <div class="ts-val">1000×</div>
+        <div class="ts-lbl">Cost Reduction</div>
+      </div>
+    </div>
+
+    <!-- THREE COLUMN: Without AI | AI Necessity | With AI -->
+    <div class="comparison">
+
+      <!-- WITHOUT AI -->
+      <div class="comp-col col-without">
+        <div class="col-header">
+          <span class="col-icon">🚫</span>
+          <span class="col-title">Without AI</span>
+        </div>
+        <ul class="comp-list">
+          <li><strong>Days-long delay</strong> — farmers wait 3–7 days for expert field visits</li>
+          <li><strong>English-only tools</strong> — 85% of farmers can't use existing platforms</li>
+          <li><strong>Generic advice</strong> — no awareness of local soil, weather, crop history</li>
+          <li><strong>No disease diagnosis</strong> — visual identification needs trained plant pathologists</li>
+          <li><strong>Fragmented data</strong> — weather, schemes, prices scattered across 50+ portals</li>
+          <li><strong>₹500+ per visit</strong> — unaffordable for smallholder farmers earning ₹6,000/month</li>
+          <li><strong>Zero scalability</strong> — cannot serve 120M farmers with 67K experts</li>
+        </ul>
+      </div>
+
+      <!-- AI NECESSITY MATRIX -->
+      <div class="col-center">
+        <div class="center-title">🔗 Why Only AI Can Bridge This</div>
+        <div class="necessity-grid">
+          <div class="nec-card nc-red">
+            <div class="nc-head">
+              <span class="nc-icon">📈</span>
+              <span class="nc-title">Scale Problem</span>
+            </div>
+            <div class="nc-reason">Serving 120M farmers simultaneously is a <strong>machine-only task</strong>. No human workforce can match 1M+ concurrent queries at ₹0.50 each.</div>
+            <span class="nc-tag ntag-scale">Bedrock + Multi-Agent</span>
+          </div>
+
+          <div class="nec-card nc-blue">
+            <div class="nc-head">
+              <span class="nc-icon">⚡</span>
+              <span class="nc-title">Speed Requirement</span>
+            </div>
+            <div class="nc-reason">Crop diseases spread in 24h. AI delivers <strong>diagnosis in 2–3 seconds</strong> with treatment plans — impossible via human consultation.</div>
+            <span class="nc-tag ntag-speed">Real-Time Inference</span>
+          </div>
+
+          <div class="nec-card nc-purple">
+            <div class="nc-head">
+              <span class="nc-icon">🗣️</span>
+              <span class="nc-title">Language Barrier</span>
+            </div>
+            <div class="nc-reason">Natural conversation in <strong>12 Indian languages</strong> requires NLU + neural TTS — no static translation can understand farmer queries.</div>
+            <span class="nc-tag ntag-lang">Polly + Transcribe + LLM</span>
+          </div>
+
+          <div class="nec-card nc-amber">
+            <div class="nc-head">
+              <span class="nc-icon">🎯</span>
+              <span class="nc-title">Context Reasoning</span>
+            </div>
+            <div class="nc-reason"><strong>5 specialist agents</strong> reason over soil + weather + market + scheme data simultaneously — no rule-based system can handle this.</div>
+            <span class="nc-tag ntag-context">Multi-Agent Orchestration</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- WITH AI -->
+      <div class="comp-col col-with">
+        <div class="col-header">
+          <span class="col-icon">✅</span>
+          <span class="col-title">With KrishiSaathi AI</span>
+        </div>
+        <ul class="comp-list">
+          <li><strong>2–3 sec response</strong> — instant answers via Bedrock LLM + RAG pipeline</li>
+          <li><strong>12 languages</strong> — voice-first interface in farmer's mother tongue</li>
+          <li><strong>Personalized advice</strong> — memory engine tracks crops, soil, location, history</li>
+          <li><strong>AI crop doctor</strong> — text/image-based disease diagnosis with treatment plans</li>
+          <li><strong>Unified platform</strong> — 5 agents synthesize weather, market, schemes, soil data</li>
+          <li><strong>₹0.50/query</strong> — affordable for every farmer, powered by AWS Bedrock</li>
+          <li><strong>Infinite scale</strong> — serves 120M farmers concurrently via cloud-native AI</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STAT BAR -->
+    <div class="stat-bar">
+      <div class="stat-item"><div class="sv sv-red">1:1800</div><div class="sl">Expert-to-Farmer Ratio</div></div>
+      <div class="stat-item"><div class="sv sv-green">2–3s</div><div class="sl">AI Response Time</div></div>
+      <div class="stat-item"><div class="sv sv-blue">12</div><div class="sl">Languages Supported</div></div>
+      <div class="stat-item"><div class="sv sv-amber">1000×</div><div class="sl">Cost Reduction</div></div>
+      <div class="stat-item"><div class="sv sv-purple">5</div><div class="sl">Specialist AI Agents</div></div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-02-idea.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-01-title.html';
+});
+</script>
+</body>
+</html>

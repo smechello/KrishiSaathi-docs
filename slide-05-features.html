@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 5 — Features List | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 48px 24px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 12px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 11px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 20px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 10px; color: #64748b; }
+  .brand-badge {
+    background: #f0fdfa; border: 1px solid #99f6e4; color: #0f766e;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 8px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #0d9488; margin-bottom: 3px;
+  }
+  .page-title { font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 2px; letter-spacing: -0.5px; }
+  .page-subtitle { font-size: 11px; color: #64748b; margin-bottom: 12px; }
+
+  /* ── FEATURES GRID ─────────────────────────────── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .feature-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+  }
+  .feature-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+
+  .fc-green::before  { background: linear-gradient(180deg, #16a34a, #22c55e); }
+  .fc-blue::before   { background: linear-gradient(180deg, #2563eb, #3b82f6); }
+  .fc-purple::before { background: linear-gradient(180deg, #7c3aed, #8b5cf6); }
+  .fc-amber::before  { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+  .fc-rose::before   { background: linear-gradient(180deg, #e11d48, #fb7185); }
+  .fc-teal::before   { background: linear-gradient(180deg, #0d9488, #14b8a6); }
+  .fc-orange::before { background: linear-gradient(180deg, #ea580c, #f97316); }
+  .fc-slate::before  { background: linear-gradient(180deg, #475569, #64748b); }
+  .fc-indigo::before { background: linear-gradient(180deg, #4f46e5, #6366f1); }
+
+  .feat-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .feat-icon {
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .fi-green  { background: #f0fdf4; }
+  .fi-blue   { background: #eff6ff; }
+  .fi-purple { background: #f5f3ff; }
+  .fi-amber  { background: #fffbeb; }
+  .fi-rose   { background: #fff1f2; }
+  .fi-teal   { background: #f0fdfa; }
+  .fi-orange { background: #fff7ed; }
+  .fi-slate  { background: #f8fafc; }
+  .fi-indigo { background: #eef2ff; }
+
+  .feat-name {
+    font-size: 13px; font-weight: 700; color: #1e293b;
+  }
+  .feat-desc {
+    font-size: 10.5px; color: #64748b; line-height: 1.4;
+    flex: 1;
+  }
+  .feat-tags {
+    display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+  }
+  .feat-tag {
+    font-size: 8.5px; padding: 2px 7px; border-radius: 5px; font-weight: 700;
+  }
+  .tag-aws    { background: #fff7ed; color: #c2410c; }
+  .tag-ai     { background: #f0fdf4; color: #15803d; }
+  .tag-ux     { background: #eff6ff; color: #1d4ed8; }
+  .tag-data   { background: #f5f3ff; color: #6d28d9; }
+  .tag-voice  { background: #fff1f2; color: #be123c; }
+  .tag-secure { background: #f8fafc; color: #475569; }
+
+  /* ── BOTTOM STATS ──────────────────────────────── */
+  .stats-row {
+    display: flex; gap: 10px; margin-top: 10px; flex-shrink: 0;
+  }
+  .stat-item {
+    flex: 1; background: #f8fafc; border: 1.5px solid #e2e8f0;
+    border-radius: 10px; padding: 8px 10px; text-align: center;
+  }
+  .stat-item .sv { font-size: 18px; font-weight: 800; }
+  .stat-item .sl { font-size: 9px; color: #64748b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-04-ai-value.html">← Prev</a>
+    <span class="current">6 / 17 — Features List</span>
+    <a href="slide-06-process-flow.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">✨ Feature Suite</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Feature List</div>
+    <div class="page-title">Comprehensive Features Offered by KrishiSaathi</div>
+    <div class="page-subtitle">Production-ready features across 5 AI agents, voice, multilingual, RAG knowledge base, and admin capabilities</div>
+
+    <div class="features-grid">
+      <!-- Feature 1 -->
+      <div class="feature-card fc-green">
+        <div class="feat-top">
+          <div class="feat-icon fi-green">🩺</div>
+          <div class="feat-name">AI Crop Disease Diagnosis</div>
+        </div>
+        <div class="feat-desc">Diagnose crop diseases from text descriptions or uploaded photos. Get treatment plans with cost estimates, recovery timelines, and preventive measures powered by RAG.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-aws">Bedrock Vision</span>
+          <span class="feat-tag tag-ai">RAG</span>
+          <span class="feat-tag tag-data">150+ Diseases</span>
+        </div>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card fc-blue">
+        <div class="feat-top">
+          <div class="feat-icon fi-blue">📊</div>
+          <div class="feat-name">Real-Time Market Intelligence</div>
+        </div>
+        <div class="feat-desc">Live mandi prices from 7,000+ markets, price trend analysis, best mandi recommendations, AI-powered price forecasting for informed selling decisions.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-ai">ML Forecast</span>
+          <span class="feat-tag tag-data">7,000+ Mandis</span>
+          <span class="feat-tag tag-ux">Charts</span>
+        </div>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card fc-purple">
+        <div class="feat-top">
+          <div class="feat-icon fi-purple">🏛️</div>
+          <div class="feat-name">Government Scheme Navigator</div>
+        </div>
+        <div class="feat-desc">Auto-eligibility checking across 200+ central & state schemes. Step-by-step application guidance, required document checklists, subsidy calculators.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-ai">Auto-Eligibility</span>
+          <span class="feat-tag tag-data">200+ Schemes</span>
+        </div>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-card fc-amber">
+        <div class="feat-top">
+          <div class="feat-icon fi-amber">🌦️</div>
+          <div class="feat-name">Hyperlocal Weather Advisory</div>
+        </div>
+        <div class="feat-desc">Live weather via OpenWeatherMap API, 5-day forecasts with Plotly charts, crop-specific irrigation advisories, spray condition checks, extreme weather alerts.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-aws">Weather API</span>
+          <span class="feat-tag tag-ux">Plotly Charts</span>
+        </div>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="feature-card fc-rose">
+        <div class="feat-top">
+          <div class="feat-icon fi-rose">🌱</div>
+          <div class="feat-name">Soil Health Expert System</div>
+        </div>
+        <div class="feat-desc">Soil type analysis, NPK fertilizer calculator per acre, organic alternatives, crop rotation recommendations, AI-powered soil health Q&A backed by RAG.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-ai">NPK Calculator</span>
+          <span class="feat-tag tag-data">Crop Rotation</span>
+        </div>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="feature-card fc-teal">
+        <div class="feat-top">
+          <div class="feat-icon fi-teal">🗣️</div>
+          <div class="feat-name">Voice-First in 12 Languages</div>
+        </div>
+        <div class="feat-desc">Amazon Transcribe for STT in 10 Indian languages, Amazon Polly neural TTS (Kajal voice) for Hindi/English, gTTS fallback for 8 additional languages.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-aws">Polly</span>
+          <span class="feat-tag tag-aws">Transcribe</span>
+          <span class="feat-tag tag-voice">12 Languages</span>
+        </div>
+      </div>
+
+      <!-- Feature 7 -->
+      <div class="feature-card fc-indigo">
+        <div class="feat-top">
+          <div class="feat-icon fi-indigo">🧠</div>
+          <div class="feat-name">Persistent Memory Engine</div>
+        </div>
+        <div class="feat-desc">Mem0-inspired system extracts facts from conversations, deduplicates using cosine similarity (0.92 threshold), injects up to 12 memories for personalized advice.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-ai">Mem0-Inspired</span>
+          <span class="feat-tag tag-data">10 Categories</span>
+        </div>
+      </div>
+
+      <!-- Feature 8 -->
+      <div class="feature-card fc-orange">
+        <div class="feat-top">
+          <div class="feat-icon fi-orange">📚</div>
+          <div class="feat-name">RAG Knowledge Base</div>
+        </div>
+        <div class="feat-desc">ChromaDB vector store with 8 specialized collections, 50,000+ agricultural documents, gemini-embedding-001 embeddings, admin can add/delete/preview documents.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-ai">ChromaDB</span>
+          <span class="feat-tag tag-data">50K+ Docs</span>
+        </div>
+      </div>
+
+      <!-- Feature 9 -->
+      <div class="feature-card fc-slate">
+        <div class="feat-top">
+          <div class="feat-icon fi-slate">🔒</div>
+          <div class="feat-name">Admin Dashboard & Auth</div>
+        </div>
+        <div class="feat-desc">Full authentication (signup, email verify, password reset) with bcrypt + JWT. 8-tab admin console: user management, chat logs, memory, KB CRUD, LLM config.</div>
+        <div class="feat-tags">
+          <span class="feat-tag tag-aws">RDS PostgreSQL</span>
+          <span class="feat-tag tag-secure">bcrypt + JWT</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+      <div class="stat-item"><div class="sv" style="color:#16a34a;">9</div><div class="sl">Core Features</div></div>
+      <div class="stat-item"><div class="sv" style="color:#2563eb;">5</div><div class="sl">AI Agents</div></div>
+      <div class="stat-item"><div class="sv" style="color:#7c3aed;">50K+</div><div class="sl">RAG Documents</div></div>
+      <div class="stat-item"><div class="sv" style="color:#f59e0b;">12</div><div class="sl">Languages</div></div>
+      <div class="stat-item"><div class="sv" style="color:#e11d48;">200+</div><div class="sl">Govt Schemes</div></div>
+      <div class="stat-item"><div class="sv" style="color:#0d9488;">7</div><div class="sl">Streamlit Pages</div></div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-06-process-flow.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-04-ai-value.html';
+});
+</script>
+</body>
+</html>

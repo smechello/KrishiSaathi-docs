@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 14 — Future Development | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 36px 20px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 6px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 26px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #f5f3ff; border: 1px solid #ddd6fe; color: #6d28d9;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 4px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #6d28d9; margin-bottom: 2px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 8px; }
+
+  /* ── ROADMAP LAYOUT ───────────────────── */
+  .roadmap-layout {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    min-height: 0;
+  }
+
+  /* Timeline phases */
+  .phase-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid #e2e8f0;
+    position: relative;
+  }
+  .phase-col:hover { border-color: #7c3aed; }
+
+  .phase-hdr {
+    padding: 8px 12px;
+    color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .ph-left { display: flex; align-items: center; gap: 6px; }
+  .ph-ico { font-size: 14px; }
+  .ph-info .ph-nm { font-size: 11px; font-weight: 800; }
+  .ph-info .ph-time { font-size: 8px; opacity: 0.8; }
+  .ph-tag {
+    font-size: 7.5px; font-weight: 700; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 6px; background: rgba(255,255,255,0.2);
+  }
+
+  .phase-body {
+    flex: 1;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .rd-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    padding: 5px 8px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #f1f5f9;
+    flex-shrink: 0;
+  }
+  .rd-item:hover { background: #f0fdf4; border-color: #bbf7d0; }
+  .rd-ico {
+    width: 22px; height: 22px;
+    border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .rd-txt .rd-nm { font-size: 9.5px; font-weight: 700; color: #1e293b; }
+  .rd-txt .rd-desc { font-size: 8px; color: #64748b; line-height: 1.3; }
+  .rd-txt .rd-aws {
+    display: inline-block;
+    font-size: 7px; font-weight: 700;
+    padding: 1px 5px; border-radius: 3px;
+    margin-top: 1px;
+  }
+  .aws-tag { background: #fff7ed; color: #c2410c; }
+  .new-tag { background: #f0fdf4; color: #15803d; }
+  .ai-tag { background: #f5f3ff; color: #6d28d9; }
+
+  /* Phase connector arrows */
+  .phase-col::after {
+    content: '→';
+    position: absolute;
+    right: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #cbd5e1;
+    font-weight: 800;
+    z-index: 2;
+  }
+  .phase-col:last-child::after { display: none; }
+
+  /* Vision box at bottom */
+  .vision-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    padding: 8px 16px;
+    border-radius: 10px;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .vision-bar .vb-ico { font-size: 20px; }
+  .vision-bar .vb-text .vb-title { font-size: 11px; font-weight: 800; color: #fbbf24; }
+  .vision-bar .vb-text .vb-desc { font-size: 9px; color: #94a3b8; }
+  .vision-bar .vb-stats { display: flex; gap: 16px; margin-left: auto; }
+  .vision-bar .vs-item { text-align: center; }
+  .vision-bar .vs-val { font-size: 14px; font-weight: 800; color: #fbbf24; }
+  .vision-bar .vs-lbl { font-size: 8px; color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-13-performance.html">← Prev</a>
+    <span class="current">15 / 17 — Future Development</span>
+    <a href="slide-15-assets.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">🚀 Roadmap</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Future Development</div>
+    <div class="page-title">Development Roadmap & Expansion Plan</div>
+    <div class="page-subtitle">4-phase roadmap from current MVP to pan-India agricultural intelligence platform serving 120M+ farmers</div>
+
+    <div class="roadmap-layout">
+
+      <!-- Phase 1: Q1 2026 -->
+      <div class="phase-col">
+        <div class="phase-hdr" style="background:linear-gradient(135deg,#16a34a,#15803d);">
+          <div class="ph-left">
+            <span class="ph-ico">🎯</span>
+            <div class="ph-info">
+              <div class="ph-nm">Phase 1</div>
+              <div class="ph-time">Q1 2026 · Current</div>
+            </div>
+          </div>
+          <div class="ph-tag">MVP</div>
+        </div>
+        <div class="phase-body">
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dcfce7;">🧠</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Multi-Agent System</div>
+              <div class="rd-desc">5 specialist agents with Supervisor orchestration</div>
+              <span class="rd-aws aws-tag">Bedrock</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dcfce7;">🗣️</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Voice Pipeline</div>
+              <div class="rd-desc">Polly TTS + Transcribe STT, 12 languages</div>
+              <span class="rd-aws aws-tag">Polly + Transcribe</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dcfce7;">🔍</div>
+            <div class="rd-txt">
+              <div class="rd-nm">RAG Knowledge Base</div>
+              <div class="rd-desc">50K+ docs, 8 ChromaDB collections</div>
+              <span class="rd-aws new-tag">Complete</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dcfce7;">🔄</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Triple LLM Failover</div>
+              <div class="rd-desc">Bedrock → Groq → Gemini auto-switch</div>
+              <span class="rd-aws new-tag">Active</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dcfce7;">📱</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Web + Telegram</div>
+              <div class="rd-desc">Streamlit app + Telegram bot</div>
+              <span class="rd-aws new-tag">Live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2: Q2-Q3 2026 -->
+      <div class="phase-col">
+        <div class="phase-hdr" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);">
+          <div class="ph-left">
+            <span class="ph-ico">🔬</span>
+            <div class="ph-info">
+              <div class="ph-nm">Phase 2</div>
+              <div class="ph-time">Q2-Q3 2026</div>
+            </div>
+          </div>
+          <div class="ph-tag">ENHANCE</div>
+        </div>
+        <div class="phase-body">
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dbeafe;">📸</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Advanced Image Analysis</div>
+              <div class="rd-desc">Multi-image uploads, disease progression tracking</div>
+              <span class="rd-aws ai-tag">Bedrock Vision</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dbeafe;">📡</div>
+            <div class="rd-txt">
+              <div class="rd-nm">IoT Sensor Integration</div>
+              <div class="rd-desc">Soil moisture, weather station data feeds</div>
+              <span class="rd-aws aws-tag">AWS IoT Core</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dbeafe;">🗓️</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Proactive Alerts</div>
+              <div class="rd-desc">Weather warnings, price alerts, scheme deadlines</div>
+              <span class="rd-aws aws-tag">SNS + EventBridge</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dbeafe;">📊</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Analytics Dashboard</div>
+              <div class="rd-desc">Usage metrics, crop health trends, yield predictions</div>
+              <span class="rd-aws aws-tag">QuickSight</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#dbeafe;">📱</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Mobile App (React Native)</div>
+              <div class="rd-desc">Offline mode, camera integration, push notifications</div>
+              <span class="rd-aws new-tag">New</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3: Q4 2026 - Q1 2027 -->
+      <div class="phase-col">
+        <div class="phase-hdr" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);">
+          <div class="ph-left">
+            <span class="ph-ico">🚀</span>
+            <div class="ph-info">
+              <div class="ph-nm">Phase 3</div>
+              <div class="ph-time">Q4 2026 – Q1 2027</div>
+            </div>
+          </div>
+          <div class="ph-tag">SCALE</div>
+        </div>
+        <div class="phase-body">
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#ede9fe;">🛒</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Marketplace Integration</div>
+              <div class="rd-desc">Direct buyer-seller connect, price negotiation AI</div>
+              <span class="rd-aws ai-tag">Bedrock Agents</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#ede9fe;">💳</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Financial Services</div>
+              <div class="rd-desc">Crop insurance, micro-loans, UPI integration</div>
+              <span class="rd-aws new-tag">FinTech</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#ede9fe;">🛰️</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Satellite Data</div>
+              <div class="rd-desc">NDVI analysis, crop health from space</div>
+              <span class="rd-aws aws-tag">SageMaker</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#ede9fe;">🏛️</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Govt API Integration</div>
+              <div class="rd-desc">eNAM, PM-KISAN, soil health card APIs</div>
+              <span class="rd-aws new-tag">Official</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#ede9fe;">🌍</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Multi-Region Deploy</div>
+              <div class="rd-desc">CDN, edge caching, auto-scaling</div>
+              <span class="rd-aws aws-tag">CloudFront</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4: 2027+ -->
+      <div class="phase-col">
+        <div class="phase-hdr" style="background:linear-gradient(135deg,#ea580c,#c2410c);">
+          <div class="ph-left">
+            <span class="ph-ico">🌟</span>
+            <div class="ph-info">
+              <div class="ph-nm">Phase 4</div>
+              <div class="ph-time">2027+</div>
+            </div>
+          </div>
+          <div class="ph-tag">VISION</div>
+        </div>
+        <div class="phase-body">
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#fff7ed;">🤝</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Community Network</div>
+              <div class="rd-desc">Farmer forums, peer knowledge sharing, mentorship</div>
+              <span class="rd-aws new-tag">Social</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#fff7ed;">🧬</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Precision Agriculture</div>
+              <div class="rd-desc">AI-driven crop planning, yield optimization</div>
+              <span class="rd-aws ai-tag">Custom ML</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#fff7ed;">🌏</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Pan-India Expansion</div>
+              <div class="rd-desc">All 28 states, district-level customization</div>
+              <span class="rd-aws new-tag">National</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#fff7ed;">📚</div>
+            <div class="rd-txt">
+              <div class="rd-nm">AgriEdu Platform</div>
+              <div class="rd-desc">Video courses, certification, best practices</div>
+              <span class="rd-aws new-tag">Edu</span>
+            </div>
+          </div>
+          <div class="rd-item">
+            <div class="rd-ico" style="background:#fff7ed;">🔗</div>
+            <div class="rd-txt">
+              <div class="rd-nm">Open API Ecosystem</div>
+              <div class="rd-desc">Third-party integrations, developer SDK</div>
+              <span class="rd-aws aws-tag">API Gateway</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vision-bar">
+      <div class="vb-ico">🌾</div>
+      <div class="vb-text">
+        <div class="vb-title">Vision: AI-Powered Agricultural Intelligence for Every Indian Farmer</div>
+        <div class="vb-desc">From MVP to pan-India platform — democratizing agricultural knowledge through AI</div>
+      </div>
+      <div class="vb-stats">
+        <div class="vs-item"><div class="vs-val">120M+</div><div class="vs-lbl">Target Farmers</div></div>
+        <div class="vs-item"><div class="vs-val">28</div><div class="vs-lbl">States</div></div>
+        <div class="vs-item"><div class="vs-val">22</div><div class="vs-lbl">Languages</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-15-assets.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-13-performance.html';
+});
+</script>
+</body>
+</html>

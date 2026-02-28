@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrishiSaathi — PPT Slides Navigator</title>
+<style>
+  /* ── RESET ─────────────────────────────────────── */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw;
+    min-height: 100vh;
+    overflow-y: auto;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── CONTAINER ─────────────────────────────────── */
+  .slide {
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 48px;
+    overflow: hidden;
+  }
+
+  /* ── BRAND HEADER ──────────────────────────────── */
+  .brand-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0;
+  }
+  .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-logo .icon {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.3px;
+  }
+  .brand-logo .text .tagline {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+  }
+  .brand-badge {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* ── CONTENT ───────────────────────────────────── */
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #16a34a;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .page-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 4px;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+  .page-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 28px;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  /* ── SLIDES GRID ───────────────────────────────── */
+  .slides-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .slide-card {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px 14px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .slide-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .slide-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-color: #16a34a;
+  }
+
+  /* Color classes */
+  .sc-green::before  { background: linear-gradient(90deg, #16a34a, #22c55e); }
+  .sc-blue::before   { background: linear-gradient(90deg, #2563eb, #3b82f6); }
+  .sc-purple::before { background: linear-gradient(90deg, #7c3aed, #8b5cf6); }
+  .sc-amber::before  { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+  .sc-rose::before   { background: linear-gradient(90deg, #e11d48, #fb7185); }
+  .sc-teal::before   { background: linear-gradient(90deg, #0d9488, #14b8a6); }
+  .sc-slate::before  { background: linear-gradient(90deg, #475569, #64748b); }
+  .sc-orange::before { background: linear-gradient(90deg, #ea580c, #f97316); }
+
+  .slide-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .sc-green .slide-num  { background: linear-gradient(135deg, #16a34a, #15803d); }
+  .sc-blue .slide-num   { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+  .sc-purple .slide-num { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+  .sc-amber .slide-num  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+  .sc-rose .slide-num   { background: linear-gradient(135deg, #e11d48, #be123c); }
+  .sc-teal .slide-num   { background: linear-gradient(135deg, #0d9488, #0f766e); }
+  .sc-slate .slide-num  { background: linear-gradient(135deg, #475569, #334155); }
+  .sc-orange .slide-num { background: linear-gradient(135deg, #ea580c, #c2410c); }
+
+  .slide-icon {
+    font-size: 26px;
+    margin: 4px 0;
+  }
+  .slide-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+  .slide-desc {
+    font-size: 10px;
+    color: #94a3b8;
+    line-height: 1.3;
+  }
+
+  /* ── INSTRUCTIONS ──────────────────────────────── */
+  .instructions {
+    background: linear-gradient(135deg, #0f7b3f, #16a34a);
+    color: #fff;
+    border-radius: 12px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 20px;
+    flex-shrink: 0;
+  }
+  .instructions strong { color: #fef08a; }
+  .instructions .step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .instructions .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ────────────────────────────────────── */
+</style>
+</head>
+<body>
+
+<div class="slide">
+  <!-- ── HEADER ──────────────────────────────────── -->
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">AWS AI for Bharat Hackathon 2026</div>
+  </div>
+
+  <!-- ── CONTENT ─────────────────────────────────── -->
+  <div class="content">
+    <div class="section-label">Presentation Navigator</div>
+    <div class="page-title">PPT Slide Screenshots — 17 Slides</div>
+    <div class="page-subtitle">Click any slide to open it full-screen. Take a screenshot (Ctrl+Shift+S or Snipping Tool) for your PowerPoint.</div>
+
+    <div class="slides-grid">
+      <!-- Row 1: Slides 1-5 -->
+      <a href="slide-01-title.html" class="slide-card sc-green">
+        <div class="slide-num">1</div>
+        <div class="slide-icon">🏆</div>
+        <div class="slide-name">Title Slide</div>
+        <div class="slide-desc">Team · Problem Statement</div>
+      </a>
+      <a href="slide-02-why-ai.html" class="slide-card sc-rose">
+        <div class="slide-num">2</div>
+        <div class="slide-icon">🧠</div>
+        <div class="slide-name">Why AI is Required</div>
+        <div class="slide-desc">Core necessity of AI</div>
+      </a>
+      <a href="slide-02-idea.html" class="slide-card sc-blue">
+        <div class="slide-num">3</div>
+        <div class="slide-icon">💡</div>
+        <div class="slide-name">Brief About Idea</div>
+        <div class="slide-desc">Problem · Solution · AI Capabilities</div>
+      </a>
+      <a href="slide-03-aws-services.html" class="slide-card sc-orange">
+        <div class="slide-num">4</div>
+        <div class="slide-icon">☁️</div>
+        <div class="slide-name">AWS Services</div>
+        <div class="slide-desc">Architecture on AWS</div>
+      </a>
+      <a href="slide-04-ai-value.html" class="slide-card sc-purple">
+        <div class="slide-num">5</div>
+        <div class="slide-icon">🧠</div>
+        <div class="slide-name">AI Value to UX</div>
+        <div class="slide-desc">What AI adds to user experience</div>
+      </a>
+      <a href="slide-05-features.html" class="slide-card sc-teal">
+        <div class="slide-num">6</div>
+        <div class="slide-icon">✨</div>
+        <div class="slide-name">Features List</div>
+        <div class="slide-desc">All features offered</div>
+      </a>
+
+      <!-- Row 2: Slides 6-9 -->
+      <a href="slide-06-process-flow.html" class="slide-card sc-green">
+        <div class="slide-num">7</div>
+        <div class="slide-icon">🔄</div>
+        <div class="slide-name">Process Flow</div>
+        <div class="slide-desc">Horizontal flow diagram</div>
+      </a>
+      <a href="slide-07-use-case.html" class="slide-card sc-blue">
+        <div class="slide-num">8</div>
+        <div class="slide-icon">👥</div>
+        <div class="slide-name">Use-Case Diagram</div>
+        <div class="slide-desc">Actor-system interactions</div>
+      </a>
+      <a href="slide-08-architecture.html" class="slide-card sc-orange">
+        <div class="slide-num">9</div>
+        <div class="slide-icon">🏗️</div>
+        <div class="slide-name">Architecture Diagram</div>
+        <div class="slide-desc">Horizontal AWS Architecture</div>
+      </a>
+      <a href="slide-09-wireframes.html" class="slide-card sc-purple">
+        <div class="slide-num">10</div>
+        <div class="slide-icon">📱</div>
+        <div class="slide-name">Wireframes</div>
+        <div class="slide-desc">UI mock diagrams</div>
+      </a>
+      <a href="slide-10-technologies.html" class="slide-card sc-teal">
+        <div class="slide-num">11</div>
+        <div class="slide-icon">⚙️</div>
+        <div class="slide-name">Technologies</div>
+        <div class="slide-desc">Tech stack utilized</div>
+      </a>
+
+      <!-- Row 3: Slides 10-13 -->
+      <a href="slide-11-cost.html" class="slide-card sc-amber">
+        <div class="slide-num">12</div>
+        <div class="slide-icon">💰</div>
+        <div class="slide-name">Implementation Cost</div>
+        <div class="slide-desc">Estimated monthly costs</div>
+      </a>
+      <a href="slide-12-snapshots.html" class="slide-card sc-rose">
+        <div class="slide-num">13</div>
+        <div class="slide-icon">📸</div>
+        <div class="slide-name">Prototype Snapshots</div>
+        <div class="slide-desc">Live app screenshots</div>
+      </a>
+      <a href="slide-13-performance.html" class="slide-card sc-slate">
+        <div class="slide-num">14</div>
+        <div class="slide-icon">📊</div>
+        <div class="slide-name">Performance Report</div>
+        <div class="slide-desc">Benchmarking metrics</div>
+      </a>
+      <a href="slide-14-future.html" class="slide-card sc-green">
+        <div class="slide-num">15</div>
+        <div class="slide-icon">🚀</div>
+        <div class="slide-name">Future Development</div>
+        <div class="slide-desc">Roadmap & enhancements</div>
+      </a>
+      <a href="slide-15-assets.html" class="slide-card sc-blue">
+        <div class="slide-num">16</div>
+        <div class="slide-icon">🔗</div>
+        <div class="slide-name">Prototype Assets</div>
+        <div class="slide-desc">GitHub · Demo Video</div>
+      </a>
+      <a href="slide-16-team.html" class="slide-card sc-purple">
+        <div class="slide-num">17</div>
+        <div class="slide-icon">👥</div>
+        <div class="slide-name">Our Team</div>
+        <div class="slide-desc">Meet the team members</div>
+      </a>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <div class="step">
+        <div class="step-num">1</div>
+        <span>Click a slide above</span>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <span>Press <strong>F11</strong> for fullscreen</span>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <span>Take screenshot (<strong>Win+Shift+S</strong>)</span>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <span>Paste into <strong>PowerPoint</strong></span>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <span>Use ← → arrows to navigate between slides</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

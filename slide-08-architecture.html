@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 8 — Architecture Diagram | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 36px 24px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 8px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 18px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #fff7ed; border: 1px solid #fed7aa; color: #c2410c;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 6px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #ea580c; margin-bottom: 2px;
+  }
+  .page-title { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 2px; letter-spacing: -0.5px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 8px; }
+
+  /* ── HORIZONTAL ARCHITECTURE ───────────────────── */
+  .arch-main {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  .arch-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .arch-col::after {
+    content: '→';
+    position: absolute;
+    right: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px; color: #cbd5e1; font-weight: 800; z-index: 2;
+  }
+  .arch-col:last-child::after { display: none; }
+
+  /* Column Header */
+  .col-hdr {
+    text-align: center; padding: 8px 6px;
+    border-radius: 10px; flex-shrink: 0;
+    color: #fff;
+  }
+  .col-hdr .ch-num {
+    font-size: 8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; opacity: 0.7;
+  }
+  .col-hdr .ch-title { font-size: 11px; font-weight: 800; margin-top: 1px; }
+
+  .ch-blue   { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+  .ch-orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
+  .ch-green  { background: linear-gradient(135deg, #16a34a, #15803d); }
+  .ch-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); }
+  .ch-slate  { background: linear-gradient(135deg, #0f172a, #1e293b); }
+
+  /* Service items */
+  .svc {
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-height: 0;
+  }
+  .svc:hover { border-color: #f97316; }
+  .svc-ico {
+    width: 30px; height: 30px;
+    border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .si-or { background: #fff7ed; }
+  .si-bl { background: #eff6ff; }
+  .si-gr { background: #f0fdf4; }
+  .si-pu { background: #f5f3ff; }
+  .si-am { background: #fffbeb; }
+  .si-rs { background: #fff1f2; }
+  .si-sl { background: #f8fafc; }
+  .si-tl { background: #f0fdfa; }
+
+  .svc-txt .st-name { font-size: 10.5px; font-weight: 700; color: #1e293b; }
+  .svc-txt .st-det { font-size: 8.5px; color: #64748b; line-height: 1.3; }
+
+  /* Agent special row */
+  .agents-strip {
+    display: flex;
+    gap: 4px;
+  }
+  .ag-mini {
+    flex: 1;
+    border-radius: 8px;
+    padding: 6px 4px;
+    text-align: center;
+    color: #fff;
+  }
+  .ag-mini .ag-ic { font-size: 14px; }
+  .ag-mini .ag-nm { font-size: 8px; font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-07-use-case.html">← Prev</a>
+    <span class="current">9 / 17 — Architecture Diagram</span>
+    <a href="slide-09-wireframes.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">🏗️ Architecture</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Architecture Diagram</div>
+    <div class="page-title">KrishiSaathi – AWS Multi-Agent Architecture</div>
+    <div class="page-subtitle">Left-to-right data flow: User Interface → Voice Processing → Multi-Agent AI (Bedrock) → Knowledge Layer → Infrastructure</div>
+
+    <div class="arch-main">
+
+      <!-- COL 1: User Interface Layer -->
+      <div class="arch-col">
+        <div class="col-hdr ch-blue">
+          <div class="ch-num">Layer 1</div>
+          <div class="ch-title">🖥️ User Interface</div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-bl">💬</div>
+          <div class="svc-txt">
+            <div class="st-name">Streamlit Web App</div>
+            <div class="st-det">7-page PWA · Chat, Crop Doctor,<br>Market, Schemes, Weather, Soil, Admin</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-bl">🤖</div>
+          <div class="svc-txt">
+            <div class="st-name">Telegram Bot</div>
+            <div class="st-det">Multi-language bot integration<br>python-telegram-bot</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-bl">🗣️</div>
+          <div class="svc-txt">
+            <div class="st-name">Voice Interface</div>
+            <div class="st-det">Audio recorder widget<br>12 Indian language support</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-bl">📧</div>
+          <div class="svc-txt">
+            <div class="st-name">Email Service</div>
+            <div class="st-det">Gmail SMTP · Verification<br>Password reset flow</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: Voice & Language Processing -->
+      <div class="arch-col">
+        <div class="col-hdr ch-orange">
+          <div class="ch-num">Layer 2</div>
+          <div class="ch-title">🗣️ Voice & Language</div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">🎤</div>
+          <div class="svc-txt">
+            <div class="st-name">Amazon Transcribe</div>
+            <div class="st-det">STT · 10 Indian languages<br>en, hi, te, ta, kn, ml, mr, bn, gu, pa</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-gr">🌐</div>
+          <div class="svc-txt">
+            <div class="st-name">Translation Engine</div>
+            <div class="st-det">deep-translator · 12 languages<br>Unicode script detection</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">🔊</div>
+          <div class="svc-txt">
+            <div class="st-name">Amazon Polly</div>
+            <div class="st-det">Neural TTS · Kajal voice<br>en-IN / hi-IN</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-rs">🔈</div>
+          <div class="svc-txt">
+            <div class="st-name">gTTS Fallback</div>
+            <div class="st-det">Google TTS for 8 regional<br>te, ta, kn, ml, mr, bn, gu, pa</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 3: Multi-Agent AI (Amazon Bedrock) -->
+      <div class="arch-col">
+        <div class="col-hdr ch-green">
+          <div class="ch-num">Layer 3</div>
+          <div class="ch-title">🧠 Multi-Agent AI</div>
+        </div>
+        <!-- Amazon Bedrock Parent Container -->
+        <div style="border:2px solid #16a34a; border-radius:10px; padding:5px 5px 6px; position:relative; flex:1; display:flex; flex-direction:column; gap:4px; background:rgba(22,163,74,0.02);">
+          <div style="position:absolute; top:-7px; left:12px; background:#fff; padding:0 8px; font-size:7px; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; color:#16a34a;">Amazon Bedrock</div>
+          <div class="svc" style="border-color:#ea580c; background:#fff7ed;">
+            <div class="svc-ico si-or">⭐</div>
+            <div class="svc-txt">
+              <div class="st-name">Claude 3.5 Sonnet</div>
+              <div class="st-det">Reasoning + Vision · Complex<br>analysis &amp; image understanding</div>
+            </div>
+          </div>
+          <div class="svc" style="border-color:#d97706; background:#fffbeb;">
+            <div class="svc-ico si-am">⚡</div>
+            <div class="svc-txt">
+              <div class="st-name">Claude 3 Haiku</div>
+              <div class="st-det">Fast classification · Lightweight<br>intent detection &amp; synthesis</div>
+            </div>
+          </div>
+          <div class="svc" style="border-color:#0f172a; background:linear-gradient(135deg,#f8fafc,#f1f5f9);">
+            <div class="svc-ico" style="background:#0f172a;">
+              <span style="font-size:13px;">🧠</span>
+            </div>
+            <div class="svc-txt">
+              <div class="st-name" style="font-weight:800;">Supervisor Agent</div>
+              <div class="st-det">Orchestration · Intent routing<br>Memory injection · Synthesis</div>
+            </div>
+          </div>
+        </div>
+        <div class="agents-strip">
+          <div class="ag-mini" style="background:linear-gradient(135deg,#16a34a,#15803d);"><div class="ag-ic">🩺</div><div class="ag-nm">Crop Doctor</div></div>
+          <div class="ag-mini" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);"><div class="ag-ic">📊</div><div class="ag-nm">Market</div></div>
+          <div class="ag-mini" style="background:linear-gradient(135deg,#7c3aed,#6d28d9);"><div class="ag-ic">🏛️</div><div class="ag-nm">Scheme</div></div>
+          <div class="ag-mini" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><div class="ag-ic">🌦️</div><div class="ag-nm">Weather</div></div>
+          <div class="ag-mini" style="background:linear-gradient(135deg,#e11d48,#be123c);"><div class="ag-ic">🌱</div><div class="ag-nm">Soil</div></div>
+        </div>
+      </div>
+
+      <!-- COL 4: Knowledge & Data Layer -->
+      <div class="arch-col">
+        <div class="col-hdr ch-purple">
+          <div class="ch-num">Layer 4</div>
+          <div class="ch-title">📚 Knowledge & Data</div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-pu">🔍</div>
+          <div class="svc-txt">
+            <div class="st-name">ChromaDB RAG Engine</div>
+            <div class="st-det">8 collections · 50K+ docs<br>gemini-embedding-001</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">🗄️</div>
+          <div class="svc-txt">
+            <div class="st-name">Amazon RDS PostgreSQL</div>
+            <div class="st-det">7 tables · SSL · Auto-backup<br>profiles, chat, memories, etc.</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-tl">🧠</div>
+          <div class="svc-txt">
+            <div class="st-name">Memory Engine</div>
+            <div class="st-det">Mem0-inspired · 10 categories<br>Cosine similarity dedup (0.92)</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-sl">🌐</div>
+          <div class="svc-txt">
+            <div class="st-name">External APIs</div>
+            <div class="st-det">OpenWeatherMap · Mandi prices<br>Government scheme databases</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 5: Infrastructure -->
+      <div class="arch-col">
+        <div class="col-hdr ch-slate">
+          <div class="ch-num">Layer 5</div>
+          <div class="ch-title">⚙️ Infrastructure & Security</div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">☁️</div>
+          <div class="svc-txt">
+            <div class="st-name">Amazon EC2</div>
+            <div class="st-det">Ubuntu · ap-south-1 (Mumbai)<br>krishisaathi.shashi.engineer</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">🪣</div>
+          <div class="svc-txt">
+            <div class="st-name">Amazon S3</div>
+            <div class="st-det">krishisaathi-voice-temp bucket<br>Temporary voice file storage</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-or">🔐</div>
+          <div class="svc-txt">
+            <div class="st-name">IAM Roles</div>
+            <div class="st-det">Least-privilege access<br>Bedrock, Polly, Transcribe, S3</div>
+          </div>
+        </div>
+        <div class="svc">
+          <div class="svc-ico si-sl">🔒</div>
+          <div class="svc-txt">
+            <div class="st-name">Auth & Security</div>
+            <div class="st-det">bcrypt + JWT (HS256)<br>1-day access / 4-day refresh</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-09-wireframes.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-07-use-case.html';
+});
+</script>
+</body>
+</html>

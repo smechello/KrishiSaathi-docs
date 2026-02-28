@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 7 — Use-Case Diagram | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 48px 24px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 10px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 18px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 8px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #2563eb; margin-bottom: 2px;
+  }
+  .page-title { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 2px; letter-spacing: -0.5px; }
+  .page-subtitle { font-size: 11px; color: #64748b; margin-bottom: 12px; }
+
+  /* ── USE CASE LAYOUT: LEFT ACTORS | CENTER SYSTEM | RIGHT EXTERNAL ── */
+  .uc-layout {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Actor Column */
+  .uc-actors {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .actor-card {
+    border-radius: 14px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .actor-card .ac-icon { font-size: 32px; margin-bottom: 4px; }
+  .actor-card .ac-name { font-size: 13px; font-weight: 800; }
+  .actor-card .ac-desc { font-size: 9px; opacity: 0.8; margin-top: 2px; }
+
+  .act-green { background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 2px solid #bbf7d0; color: #15803d; }
+  .act-blue  { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 2px solid #bfdbfe; color: #1d4ed8; }
+  .act-slate { background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 2px solid #e2e8f0; color: #475569; }
+
+  /* Connector line */
+  .uc-connector {
+    width: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .conn-line {
+    height: 2px;
+    background: linear-gradient(90deg, #94a3b8, #cbd5e1);
+    position: relative;
+  }
+  .conn-line::after {
+    content: ''; position: absolute; right: -1px; top: -3px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 5px solid #94a3b8;
+  }
+
+  /* System Boundary */
+  .uc-system {
+    flex: 1;
+    border: 2.5px solid #2563eb;
+    border-radius: 18px;
+    padding: 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .uc-system-label {
+    position: absolute;
+    top: -11px; left: 24px;
+    background: #fff;
+    padding: 0 12px;
+    font-size: 12px; font-weight: 800;
+    color: #2563eb;
+    letter-spacing: 0.5px;
+  }
+
+  /* Use case ellipses grid */
+  .uc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .use-case {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 40px;
+    padding: 10px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .use-case:hover {
+    border-color: #2563eb;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.12);
+  }
+  .uc-icon { font-size: 18px; margin-bottom: 3px; }
+  .uc-name { font-size: 10.5px; font-weight: 700; color: #1e293b; line-height: 1.2; }
+  .uc-agent { font-size: 8px; color: #94a3b8; font-style: italic; margin-top: 2px; }
+
+  /* Color accents for use cases */
+  .ucc-green  { border-color: #bbf7d0; background: #fafffe; }
+  .ucc-blue   { border-color: #bfdbfe; background: #fafbff; }
+  .ucc-purple { border-color: #ddd6fe; background: #fcfaff; }
+  .ucc-amber  { border-color: #fde68a; background: #fffefa; }
+  .ucc-rose   { border-color: #fecdd3; background: #fffafa; }
+  .ucc-teal   { border-color: #99f6e4; background: #fafdfc; }
+
+  /* Right: External Systems */
+  .uc-external {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .ext-card {
+    background: #fff7ed;
+    border: 1.5px solid #fed7aa;
+    border-radius: 10px;
+    padding: 10px 10px;
+    text-align: center;
+  }
+  .ext-card .ext-icon { font-size: 18px; margin-bottom: 2px; }
+  .ext-card .ext-name { font-size: 10px; font-weight: 700; color: #c2410c; }
+  .ext-card .ext-sub { font-size: 8px; color: #9a3412; margin-top: 1px; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-06-process-flow.html">← Prev</a>
+    <span class="current">8 / 17 — Use-Case Diagram</span>
+    <a href="slide-08-architecture.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">👥 Use Cases</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Use-Case Diagram</div>
+    <div class="page-title">Actor-System Interaction Map</div>
+    <div class="page-subtitle">UML-style use-case diagram showing all actors, system capabilities, and external service dependencies</div>
+
+    <div class="uc-layout">
+      <!-- LEFT: Actors -->
+      <div class="uc-actors">
+        <div class="actor-card act-green">
+          <div class="ac-icon">👨‍🌾</div>
+          <div class="ac-name">Farmer</div>
+          <div class="ac-desc">Primary user · Voice/Text<br>12 Indian languages</div>
+        </div>
+        <div class="actor-card act-blue">
+          <div class="ac-icon">🤖</div>
+          <div class="ac-name">Telegram User</div>
+          <div class="ac-desc">Bot integration<br>Remote access</div>
+        </div>
+        <div class="actor-card act-slate">
+          <div class="ac-icon">🔧</div>
+          <div class="ac-name">Admin</div>
+          <div class="ac-desc">8-tab dashboard<br>System management</div>
+        </div>
+      </div>
+
+      <!-- Left connectors -->
+      <div class="uc-connector">
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+      </div>
+
+      <!-- CENTER: System Boundary -->
+      <div class="uc-system">
+        <div class="uc-system-label">🌾 KrishiSaathi System</div>
+
+        <div class="uc-grid">
+          <!-- Row 1: Core interactions -->
+          <div class="use-case ucc-green">
+            <div class="uc-icon">💬</div>
+            <div class="uc-name">Ask Farming Question</div>
+            <div class="uc-agent">SupervisorAgent</div>
+          </div>
+          <div class="use-case ucc-green">
+            <div class="uc-icon">🎤</div>
+            <div class="uc-name">Voice Input/Output</div>
+            <div class="uc-agent">Transcribe + Polly</div>
+          </div>
+          <div class="use-case ucc-green">
+            <div class="uc-icon">🌐</div>
+            <div class="uc-name">Switch Language</div>
+            <div class="uc-agent">TranslationService</div>
+          </div>
+
+          <!-- Row 2: Agent use cases -->
+          <div class="use-case ucc-blue">
+            <div class="uc-icon">🩺</div>
+            <div class="uc-name">Diagnose Crop Disease</div>
+            <div class="uc-agent">CropDoctorAgent</div>
+          </div>
+          <div class="use-case ucc-blue">
+            <div class="uc-icon">📸</div>
+            <div class="uc-name">Upload Crop Photo</div>
+            <div class="uc-agent">Bedrock Vision</div>
+          </div>
+          <div class="use-case ucc-blue">
+            <div class="uc-icon">📊</div>
+            <div class="uc-name">Check Market Prices</div>
+            <div class="uc-agent">MarketAgent</div>
+          </div>
+
+          <!-- Row 3: More agent use cases -->
+          <div class="use-case ucc-purple">
+            <div class="uc-icon">🏛️</div>
+            <div class="uc-name">Find Govt Schemes</div>
+            <div class="uc-agent">SchemeAgent</div>
+          </div>
+          <div class="use-case ucc-amber">
+            <div class="uc-icon">🌦️</div>
+            <div class="uc-name">Get Weather Advisory</div>
+            <div class="uc-agent">WeatherAgent</div>
+          </div>
+          <div class="use-case ucc-rose">
+            <div class="uc-icon">🌱</div>
+            <div class="uc-name">Soil Analysis & NPK</div>
+            <div class="uc-agent">SoilAgent</div>
+          </div>
+
+          <!-- Row 4: System use cases -->
+          <div class="use-case ucc-teal">
+            <div class="uc-icon">🧠</div>
+            <div class="uc-name">Remember Context</div>
+            <div class="uc-agent">MemoryEngine</div>
+          </div>
+          <div class="use-case ucc-teal">
+            <div class="uc-icon">👤</div>
+            <div class="uc-name">Sign Up / Login</div>
+            <div class="uc-agent">AuthService</div>
+          </div>
+          <div class="use-case ucc-teal">
+            <div class="uc-icon">🔧</div>
+            <div class="uc-name">Manage System</div>
+            <div class="uc-agent">AdminDashboard</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right connectors -->
+      <div class="uc-connector" style="transform: scaleX(-1);">
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+        <div class="conn-line"></div>
+      </div>
+
+      <!-- RIGHT: External Systems -->
+      <div class="uc-external">
+        <div class="ext-card">
+          <div class="ext-icon">☁️</div>
+          <div class="ext-name">Amazon Bedrock</div>
+          <div class="ext-sub">Claude 3.5 Sonnet<br>Claude 3 Haiku</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon">🎤</div>
+          <div class="ext-name">Amazon Transcribe</div>
+          <div class="ext-sub">STT · 10 Languages</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon">🔊</div>
+          <div class="ext-name">Amazon Polly</div>
+          <div class="ext-sub">Neural TTS · Kajal</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon">🗄️</div>
+          <div class="ext-name">Amazon RDS</div>
+          <div class="ext-sub">PostgreSQL · 7 Tables</div>
+        </div>
+        <div class="ext-card">
+          <div class="ext-icon">🌤️</div>
+          <div class="ext-name">OpenWeatherMap</div>
+          <div class="ext-sub">Live Weather API</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-08-architecture.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-06-process-flow.html';
+});
+</script>
+</body>
+</html>

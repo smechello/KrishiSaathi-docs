@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 12 — Prototype Snapshots | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 36px 20px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 6px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 26px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 17px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #fef2f2; border: 1px solid #fecaca; color: #dc2626;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 4px 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #dc2626; margin-bottom: 2px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; }
+  .page-subtitle { font-size: 10px; color: #64748b; margin-bottom: 6px; }
+
+  /* ── SNAPSHOTS GRID ───────────────────── */
+  .snap-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    min-height: 0;
+  }
+  .snap-card {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    position: relative;
+  }
+  .snap-card:hover { border-color: #ea580c; box-shadow: 0 4px 16px rgba(234,88,12,0.12); }
+
+  .snap-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    flex-shrink: 0;
+  }
+  .snap-hdr .sh-label { font-size: 10.5px; font-weight: 700; color: #1e293b; }
+  .snap-hdr .sh-badge { font-size: 8px; font-weight: 600; padding: 2px 8px; border-radius: 8px; }
+
+  .snap-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    min-height: 0;
+    position: relative;
+  }
+
+  /* Placeholder screenshot mockups */
+  .snap-mock {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+  .sm-top {
+    height: 18px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .sm-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .sm-url { flex: 1; height: 8px; background: rgba(255,255,255,0.3); border-radius: 3px; margin-left: 6px; }
+  .sm-content { flex: 1; padding: 6px; display: flex; flex-direction: column; gap: 4px; min-height: 0; }
+
+  /* Mock content blocks */
+  .mc-row { display: flex; gap: 4px; flex-shrink: 0; }
+  .mc-sb { width: 40px; background: rgba(0,0,0,0.06); border-radius: 4px; flex-shrink: 0; }
+  .mc-main { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+  .mc-block { border-radius: 3px; flex-shrink: 0; }
+  .mc-flex { display: flex; gap: 3px; }
+  .mc-card-sm { flex: 1; border-radius: 4px; padding: 3px; }
+
+  /* Specific page mockups */
+  .mock-chat .sm-top { background: #0f172a; }
+  .mock-chat .sm-dot:nth-child(1) { background: #ef4444; }
+  .mock-chat .sm-dot:nth-child(2) { background: #fbbf24; }
+  .mock-chat .sm-dot:nth-child(3) { background: #22c55e; }
+  .mock-chat .sm-content { background: #fafafa; }
+
+  .mock-crop .sm-top { background: #dc2626; }
+  .mock-crop .sm-dot { background: rgba(255,255,255,0.4); }
+  .mock-crop .sm-content { background: #fef2f2; }
+
+  .mock-market .sm-top { background: #2563eb; }
+  .mock-market .sm-dot { background: rgba(255,255,255,0.4); }
+  .mock-market .sm-content { background: #eff6ff; }
+
+  .mock-scheme .sm-top { background: #7c3aed; }
+  .mock-scheme .sm-dot { background: rgba(255,255,255,0.4); }
+  .mock-scheme .sm-content { background: #f5f3ff; }
+
+  .mock-weather .sm-top { background: #d97706; }
+  .mock-weather .sm-dot { background: rgba(255,255,255,0.4); }
+  .mock-weather .sm-content { background: #fffbeb; }
+
+  .mock-admin .sm-top { background: #0f172a; }
+  .mock-admin .sm-dot { background: rgba(255,255,255,0.4); }
+  .mock-admin .sm-content { background: #f8fafc; }
+
+  .snap-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,23,42,0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .snap-card:hover .snap-overlay { opacity: 1; }
+  .snap-overlay span {
+    background: rgba(15,23,42,0.8);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  .snap-foot {
+    padding: 5px 10px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .snap-foot .sf-url { font-size: 8px; color: #94a3b8; font-family: 'Consolas', monospace; }
+  .snap-foot .sf-tag { font-size: 8px; font-weight: 600; color: #16a34a; }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-11-cost.html">← Prev</a>
+    <span class="current">13 / 17 — Prototype Snapshots</span>
+    <a href="slide-13-performance.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">📸 Live Prototype</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Snapshots of Prototype</div>
+    <div class="page-title">Live Application Screenshots</div>
+    <div class="page-subtitle">All screenshots from the live deployment at https://krishisaathi.shashi.engineer — Replace these mockups with actual screenshots</div>
+
+    <div class="snap-grid">
+
+      <!-- 1: Chat Page -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">💬 AI Chat Interface</div>
+          <div class="sh-badge" style="background:#eff6ff; color:#2563eb;">Page 1</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-chat">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div class="mc-row" style="flex:1;">
+                <div class="mc-sb"></div>
+                <div class="mc-main">
+                  <div class="mc-block" style="height:10px; width:55%; background:#dbeafe;"></div>
+                  <div class="mc-block" style="height:14px; width:75%; background:#dcfce7;"></div>
+                  <div class="mc-block" style="height:10px; width:50%; background:#dbeafe; align-self:flex-end;"></div>
+                  <div class="mc-block" style="height:16px; width:85%; background:#dcfce7;"></div>
+                  <div style="margin-top:auto; display:flex; gap:3px;">
+                    <div style="flex:1; height:12px; background:#e2e8f0; border-radius:3px;"></div>
+                    <div style="width:24px; height:12px; background:#16a34a; border-radius:3px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Chat</div>
+          <div class="sf-tag">Multi-agent AI chat with voice</div>
+        </div>
+      </div>
+
+      <!-- 2: Crop Doctor -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">🩺 Crop Doctor</div>
+          <div class="sh-badge" style="background:#fef2f2; color:#dc2626;">Page 2</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-crop">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div class="mc-flex" style="flex:1;">
+                <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                  <div style="flex:1; border:1.5px dashed #fca5a5; border-radius:4px; display:flex; align-items:center; justify-content:center;">
+                    <span style="font-size:16px;">📷</span>
+                  </div>
+                  <div style="height:10px; background:#fecaca; border-radius:3px;"></div>
+                  <div style="height:10px; width:50%; background:#dc2626; border-radius:3px;"></div>
+                </div>
+                <div style="flex:1; background:#fff; border-radius:4px; border:1px solid #fecaca; padding:4px; display:flex; flex-direction:column; gap:3px;">
+                  <div style="height:8px; width:60%; background:#fecaca; border-radius:2px;"></div>
+                  <div style="height:6px; width:80%; background:#fee2e2; border-radius:2px;"></div>
+                  <div style="height:6px; width:70%; background:#fee2e2; border-radius:2px;"></div>
+                  <div style="height:6px; width:90%; background:#fee2e2; border-radius:2px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Crop_Doctor</div>
+          <div class="sf-tag">AI vision disease diagnosis</div>
+        </div>
+      </div>
+
+      <!-- 3: Market Prices -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">📊 Market Prices</div>
+          <div class="sh-badge" style="background:#eff6ff; color:#2563eb;">Page 3</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-market">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div style="display:flex; gap:3px; flex-shrink:0;">
+                <div style="flex:1; height:8px; background:#bfdbfe; border-radius:2px;"></div>
+                <div style="flex:1; height:8px; background:#bfdbfe; border-radius:2px;"></div>
+              </div>
+              <div class="mc-flex" style="flex:1;">
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+              </div>
+              <div class="mc-flex" style="flex:1;">
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+                <div class="mc-card-sm" style="background:#dbeafe;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Market_Prices</div>
+          <div class="sf-tag">Live mandi price analytics</div>
+        </div>
+      </div>
+
+      <!-- 4: Schemes -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">🏛️ Government Schemes</div>
+          <div class="sh-badge" style="background:#f5f3ff; color:#7c3aed;">Page 4</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-scheme">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div style="height:10px; background:#ddd6fe; border-radius:3px; flex-shrink:0;"></div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                <div style="flex:1; background:#ede9fe; border-radius:4px;"></div>
+                <div style="flex:1; background:#ede9fe; border-radius:4px;"></div>
+                <div style="flex:1; background:#ede9fe; border-radius:4px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Schemes</div>
+          <div class="sf-tag">Personalized scheme finder</div>
+        </div>
+      </div>
+
+      <!-- 5: Weather -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">🌦️ Weather Intelligence</div>
+          <div class="sh-badge" style="background:#fffbeb; color:#d97706;">Page 5</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-weather">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div style="height:10px; background:#fde68a; border-radius:3px; flex-shrink:0;"></div>
+              <div class="mc-flex" style="flex:1;">
+                <div style="flex:1; background:#fef3c7; border-radius:4px; display:flex; align-items:center; justify-content:center;">
+                  <span style="font-size:20px;">☀️</span>
+                </div>
+                <div style="flex:1.5; display:flex; flex-direction:column; gap:3px;">
+                  <div style="flex:1; background:#fef3c7; border-radius:4px;"></div>
+                  <div style="flex:1; background:#fef3c7; border-radius:4px;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Weather</div>
+          <div class="sf-tag">Forecast + farming advisory</div>
+        </div>
+      </div>
+
+      <!-- 6: Admin Panel -->
+      <div class="snap-card">
+        <div class="snap-hdr">
+          <div class="sh-label">⚙️ Admin Dashboard</div>
+          <div class="sh-badge" style="background:#f8fafc; color:#0f172a;">Page 7</div>
+        </div>
+        <div class="snap-body">
+          <div class="snap-mock mock-admin">
+            <div class="sm-top"><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-dot"></div><div class="sm-url"></div></div>
+            <div class="sm-content">
+              <div style="display:flex; gap:2px; flex-shrink:0;">
+                <div style="height:8px; width:28px; background:#334155; border-radius:2px;"></div>
+                <div style="height:8px; width:28px; background:#475569; border-radius:2px;"></div>
+                <div style="height:8px; width:28px; background:#475569; border-radius:2px;"></div>
+                <div style="height:8px; width:28px; background:#475569; border-radius:2px;"></div>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:3px;">
+                <div style="display:flex; gap:2px; flex-shrink:0;">
+                  <div style="flex:1; height:8px; background:#1e293b; border-radius:2px;"></div>
+                  <div style="flex:1; height:8px; background:#1e293b; border-radius:2px;"></div>
+                  <div style="flex:1; height:8px; background:#1e293b; border-radius:2px;"></div>
+                </div>
+                <div style="flex:1; background:#f1f5f9; border-radius:4px;"></div>
+                <div style="flex:1; background:#f1f5f9; border-radius:4px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="snap-overlay"><span>📷 Replace with live screenshot</span></div>
+        </div>
+        <div class="snap-foot">
+          <div class="sf-url">:8501/Admin</div>
+          <div class="sf-tag">8-tab control panel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-13-performance.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-11-cost.html';
+});
+</script>
+</body>
+</html>

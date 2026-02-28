@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slide 6 — Process Flow Diagram | KrishiSaathi</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100vw; height: 100vh; overflow: hidden;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #ffffff; color: #1a1a2e; -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 40px 18px; overflow: hidden;
+  }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #0f172a; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 24px; font-size: 11px; z-index: 100;
+  }
+  .nav-bar a { color: #94a3b8; text-decoration: none; padding: 4px 12px; border-radius: 6px; font-weight: 600; }
+  .nav-bar a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .nav-bar .current { color: #fbbf24; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+
+  .brand-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-bottom: 8px; border-bottom: 2px solid #f1f5f9;
+    flex-shrink: 0; margin-top: 28px;
+  }
+  .brand-logo { display: flex; align-items: center; gap: 12px; }
+  .brand-logo .icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: 0 4px 12px rgba(22,163,74,0.3);
+  }
+  .brand-logo .text .name { font-size: 16px; font-weight: 800; color: #0f172a; }
+  .brand-logo .text .tagline { font-size: 9px; color: #64748b; }
+  .brand-badge {
+    background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d;
+    padding: 5px 14px; border-radius: 20px; font-size: 11px; font-weight: 600;
+  }
+
+  .content {
+    flex: 1; display: flex; flex-direction: column;
+    overflow: hidden; padding: 6px 0 0;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 2px; color: #16a34a; margin-bottom: 1px;
+  }
+  .page-title { font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 1px; letter-spacing: -0.5px; }
+  .page-subtitle { font-size: 11px; color: #64748b; margin-bottom: 8px; }
+
+  /* ── HORIZONTAL PROCESS FLOW ───────────────────── */
+  .flow-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0;
+    min-height: 0;
+  }
+
+  /* Row of flow boxes with arrows */
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: center;
+  }
+
+  .flow-box {
+    border-radius: 12px;
+    padding: 8px 16px;
+    text-align: center;
+    position: relative;
+    min-width: 0;
+  }
+  .flow-box .fb-step {
+    font-size: 7px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; opacity: 0.7; margin-bottom: 2px;
+  }
+  .flow-box .fb-icon { font-size: 16px; margin-bottom: 2px; }
+  .flow-box .fb-title { font-size: 11px; font-weight: 800; }
+  .flow-box .fb-sub { font-size: 8px; opacity: 0.75; margin-top: 2px; line-height: 1.35; }
+
+  .fb-green  { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; box-shadow: 0 4px 12px rgba(22,163,74,0.25); }
+  .fb-blue   { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,0.25); }
+  .fb-dark   { background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff; box-shadow: 0 4px 12px rgba(15,23,42,0.25); }
+  .fb-purple { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 4px 12px rgba(124,58,237,0.25); }
+  .fb-amber  { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; box-shadow: 0 4px 12px rgba(245,158,11,0.25); }
+  .fb-rose   { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; box-shadow: 0 4px 12px rgba(225,29,72,0.25); }
+  .fb-teal   { background: linear-gradient(135deg, #0d9488, #0f766e); color: #fff; box-shadow: 0 4px 12px rgba(13,148,136,0.25); }
+
+  /* Horizontal arrow */
+  .h-arrow {
+    width: 70px; min-width: 70px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; flex-shrink: 0;
+  }
+  .h-arrow::before {
+    content: ''; height: 2px; width: 34px;
+    background: linear-gradient(90deg, #cbd5e1, #94a3b8);
+  }
+  .h-arrow::after {
+    content: ''; width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid #94a3b8;
+  }
+  .h-arrow .arrow-lbl {
+    position: absolute; top: -11px;
+    font-size: 7px; color: #94a3b8; font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Vertical arrow between rows */
+  .v-arrow-row {
+    display: flex; justify-content: center;
+    height: 12px;
+  }
+  .v-arrow {
+    width: 2px; height: 8px;
+    background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+    position: relative;
+  }
+  .v-arrow::after {
+    content: ''; position: absolute;
+    bottom: -5px; left: -4px;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #94a3b8;
+  }
+
+  /* Spread connector */
+  .spread-row {
+    display: flex; justify-content: center;
+    position: relative; height: 16px;
+    margin: 0 auto; width: 76%;
+  }
+  .spread-row::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px; background: #cbd5e1;
+  }
+  .spread-drop {
+    position: absolute; width: 2px; height: 100%;
+    background: #cbd5e1;
+  }
+  .spread-drop::after {
+    content: ''; position: absolute;
+    bottom: -1px; left: -4px;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #94a3b8;
+  }
+
+  /* Merge connector */
+  .merge-row {
+    display: flex; justify-content: center;
+    position: relative; height: 16px;
+    margin: 0 auto; width: 76%;
+  }
+  .merge-row::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px; background: #cbd5e1;
+  }
+  .merge-up {
+    position: absolute; width: 2px; height: 100%;
+    background: #cbd5e1;
+  }
+
+  /* Agent cards in spread */
+  .agents-row {
+    display: flex;
+    justify-content: space-between;
+    width: 76%;
+    margin: 0 auto;
+    gap: 8px;
+  }
+  .agent-mini {
+    border-radius: 10px;
+    padding: 6px 8px;
+    text-align: center;
+    flex: 1;
+  }
+  .agent-mini .am-icon { font-size: 16px; margin-bottom: 1px; }
+  .agent-mini .am-name { font-size: 9px; font-weight: 800; }
+  .agent-mini .am-rag { font-size: 7px; opacity: 0.7; margin-top: 1px; }
+
+  /* ── LOCALIZATION LAYER GROUP ───────────────────── */
+  .loc-group {
+    border: 2px solid #7c3aed;
+    border-radius: 14px;
+    padding: 4px 6px 6px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(124, 58, 237, 0.03);
+  }
+  .loc-group-header {
+    font-size: 7px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 1.5px; color: #7c3aed;
+    background: #fff; padding: 0 10px;
+    position: absolute; top: -7px;
+  }
+  .loc-sub-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-top: 6px;
+  }
+  .loc-box {
+    border-radius: 10px;
+    padding: 6px 10px;
+    text-align: center;
+    min-width: 0;
+  }
+  .loc-box .lb-num {
+    font-size: 7px; font-weight: 700; opacity: 0.7; letter-spacing: 1px;
+  }
+  .loc-box .lb-icon { font-size: 14px; }
+  .loc-box .lb-title { font-size: 9px; font-weight: 800; }
+  .loc-box .lb-sub { font-size: 7px; opacity: 0.75; margin-top: 1px; line-height: 1.2; }
+
+  /* Small arrow inside localization group */
+  .loc-arrow {
+    width: 18px; min-width: 18px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .loc-arrow::before {
+    content: ''; height: 2px; width: 10px;
+    background: rgba(124,58,237,0.35);
+  }
+  .loc-arrow::after {
+    content: ''; width: 0; height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 5px solid rgba(124,58,237,0.5);
+  }
+
+  /* Annotation badges */
+  .step-note {
+    position: absolute; font-size: 7px; font-weight: 700;
+    padding: 2px 8px; border-radius: 8px;
+    white-space: nowrap; z-index: 5;
+  }
+  .note-internal {
+    background: #faf5ff; border: 1px solid #ddd6fe; color: #7c3aed;
+    bottom: -10px; left: 50%; transform: translateX(-50%);
+  }
+  .note-output {
+    background: #faf5ff; border: 1px solid #ddd6fe; color: #7c3aed;
+    top: -9px; right: -4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <a href="index.html">☰ All Slides</a>
+  <div class="nav-links">
+    <a href="slide-05-features.html">← Prev</a>
+    <span class="current">7 / 17 — Process Flow</span>
+    <a href="slide-07-use-case.html">Next →</a>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="brand-header">
+    <div class="brand-logo">
+      <div class="icon">🌾</div>
+      <div class="text">
+        <div class="name">KrishiSaathi</div>
+        <div class="tagline">AI-Powered Multi-Agent Agricultural Intelligence</div>
+      </div>
+    </div>
+    <div class="brand-badge">🔄 Process Flow</div>
+  </div>
+
+  <div class="content">
+    <div class="section-label">Process Flow Diagram</div>
+    <div class="page-title">Query Processing Pipeline — End to End</div>
+    <div class="page-subtitle">How a farmer's question travels through the multi-agent system: from voice input to expert response in 3–5 seconds</div>
+
+    <div class="flow-main">
+
+      <!-- ═══ ROW 1: Farmer Input → STT → Normalize → Supervisor ═══ -->
+      <div class="flow-row">
+        <div class="flow-box fb-green" style="min-width:140px;">
+          <div class="fb-step">Step 1 · Input</div>
+          <div class="fb-icon">👨‍🌾</div>
+          <div class="fb-title">Farmer Input</div>
+          <div class="fb-sub">Voice / Text in any of<br>12 Indian Languages</div>
+        </div>
+
+        <div class="h-arrow"><span class="arrow-lbl">Amazon Transcribe</span></div>
+
+        <div class="flow-box fb-blue" style="min-width:140px;">
+          <div class="fb-step">Step 2 · STT</div>
+          <div class="fb-icon">🎤</div>
+          <div class="fb-title">Speech-to-Text</div>
+          <div class="fb-sub">Amazon Transcribe<br>10 Indian Languages</div>
+        </div>
+
+        <div class="h-arrow"><span class="arrow-lbl">deep-translator</span></div>
+
+        <div class="flow-box fb-purple" style="min-width:190px; position:relative;">
+          <div class="fb-step">Step 3 · Normalize</div>
+          <div class="fb-icon">🔄</div>
+          <div class="fb-title">Normalize to English</div>
+          <div class="fb-sub">Unicode script detect →<br>Internal processing language</div>
+          <div class="step-note note-internal">⚙️ Internal — for AI processing</div>
+        </div>
+
+        <div class="h-arrow"><span class="arrow-lbl">Route to AI</span></div>
+
+        <div class="flow-box fb-dark" style="min-width:200px;">
+          <div class="fb-step">Step 4 · Orchestrate</div>
+          <div class="fb-icon">🧠</div>
+          <div class="fb-title">Supervisor Agent</div>
+          <div class="fb-sub">Intent Classification · Entity Extraction<br>Memory Injection (12 memories) · Routing</div>
+        </div>
+      </div>
+
+      <!-- ═══ Spread: Supervisor → 5 Domain Agents ═══ -->
+      <div class="v-arrow-row"><div class="v-arrow"></div></div>
+
+      <div class="spread-row">
+        <div class="spread-drop" style="left:0;"></div>
+        <div class="spread-drop" style="left:25%;"></div>
+        <div class="spread-drop" style="left:50%;"></div>
+        <div class="spread-drop" style="left:75%;"></div>
+        <div class="spread-drop" style="right:0;"></div>
+      </div>
+
+      <!-- ═══ ROW 2: 5 Selected Domain Agents ═══ -->
+      <div class="agents-row">
+        <div class="agent-mini fb-green">
+          <div class="am-icon">🩺</div>
+          <div class="am-name">Crop Doctor</div>
+          <div class="am-rag">RAG: crop_diseases<br>farming_practices</div>
+        </div>
+        <div class="agent-mini fb-blue">
+          <div class="am-icon">📊</div>
+          <div class="am-name">Market Analyst</div>
+          <div class="am-rag">RAG: market_data<br>mandi_prices</div>
+        </div>
+        <div class="agent-mini fb-purple">
+          <div class="am-icon">🏛️</div>
+          <div class="am-name">Scheme Advisor</div>
+          <div class="am-rag">RAG: government_schemes<br>schemes_database</div>
+        </div>
+        <div class="agent-mini fb-amber">
+          <div class="am-icon">🌦️</div>
+          <div class="am-name">Weather Prophet</div>
+          <div class="am-rag">API: OpenWeatherMap<br>RAG: farming_practices</div>
+        </div>
+        <div class="agent-mini fb-rose">
+          <div class="am-icon">🌱</div>
+          <div class="am-name">Soil Expert</div>
+          <div class="am-rag">RAG: soil_data<br>farming_practices</div>
+        </div>
+      </div>
+
+      <!-- ═══ Merge: Agents → Synthesis ═══ -->
+      <div class="merge-row">
+        <div class="merge-up" style="left:0;"></div>
+        <div class="merge-up" style="left:25%;"></div>
+        <div class="merge-up" style="left:50%;"></div>
+        <div class="merge-up" style="left:75%;"></div>
+        <div class="merge-up" style="right:0;"></div>
+      </div>
+
+      <div class="v-arrow-row"><div class="v-arrow"></div></div>
+
+      <!-- ═══ ROW 3: Synthesis → Localization Layer → Expert Response ═══ -->
+      <div class="flow-row">
+        <div class="flow-box fb-dark" style="min-width:150px;">
+          <div class="fb-step">Step 5 · Synthesis</div>
+          <div class="fb-icon">🔗</div>
+          <div class="fb-title">Response Synthesis</div>
+          <div class="fb-sub">Merge multi-agent outputs<br>Prioritize · Deduplicate</div>
+        </div>
+
+        <div class="h-arrow"><span class="arrow-lbl">Localize</span></div>
+
+        <!-- Grouped Localization Layer -->
+        <div class="loc-group">
+          <div class="loc-group-header">Step 6 — Localization Layer</div>
+          <div class="loc-sub-row">
+            <div class="loc-box fb-blue" style="min-width:130px;">
+              <div class="lb-num">6.1</div>
+              <div class="lb-icon">🌐</div>
+              <div class="lb-title">Translate to<br>Farmer's Language</div>
+              <div class="lb-sub">deep-translator · chunk ≤4500</div>
+            </div>
+
+            <div class="loc-arrow"></div>
+
+            <div class="loc-box fb-amber" style="min-width:120px;">
+              <div class="lb-num">6.2</div>
+              <div class="lb-icon">🔊</div>
+              <div class="lb-title">Text-to-Speech</div>
+              <div class="lb-sub">Polly (Hi/En)<br>gTTS (8 langs)</div>
+            </div>
+
+            <div class="loc-arrow"></div>
+
+            <div class="loc-box fb-teal" style="min-width:120px;">
+              <div class="lb-num">6.3</div>
+              <div class="lb-icon">💾</div>
+              <div class="lb-title">Store Context</div>
+              <div class="lb-sub">RDS PostgreSQL<br>Mem0 Engine</div>
+            </div>
+          </div>
+          <div class="step-note note-output">🌍 Output — for farmer delivery</div>
+        </div>
+
+        <div class="h-arrow"><span class="arrow-lbl">Deliver</span></div>
+
+        <div class="flow-box fb-green" style="min-width:150px;">
+          <div class="fb-step">Step 7 · Output</div>
+          <div class="fb-icon">✅</div>
+          <div class="fb-title">Expert Response</div>
+          <div class="fb-sub">Text + Voice in farmer's<br>language · Actionable advice</div>
+        </div>
+      </div>
+
+      <!-- ═══ Bottom: Key Metrics (unchanged) ═══ -->
+      <div style="display:flex; gap:10px; flex-shrink:0;">
+        <div style="flex:1; background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:10px; padding:8px 12px; text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:#16a34a;">3-5 sec</div>
+          <div style="font-size:9px; color:#15803d;">End-to-End Latency</div>
+        </div>
+        <div style="flex:1; background:#eff6ff; border:1.5px solid #bfdbfe; border-radius:10px; padding:8px 12px; text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:#2563eb;">92%</div>
+          <div style="font-size:9px; color:#1d4ed8;">Intent Accuracy</div>
+        </div>
+        <div style="flex:1; background:#f5f3ff; border:1.5px solid #ddd6fe; border-radius:10px; padding:8px 12px; text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:#7c3aed;">12</div>
+          <div style="font-size:9px; color:#6d28d9;">Memories Injected</div>
+        </div>
+        <div style="flex:1; background:#fffbeb; border:1.5px solid #fde68a; border-radius:10px; padding:8px 12px; text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:#d97706;">≥0.80</div>
+          <div style="font-size:9px; color:#92400e;">Keyword Skip Threshold</div>
+        </div>
+        <div style="flex:1; background:#fff1f2; border:1.5px solid #fecdd3; border-radius:10px; padding:8px 12px; text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:#e11d48;">3</div>
+          <div style="font-size:9px; color:#be123c;">LLM Fallback Backends</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight') window.location.href = 'slide-07-use-case.html';
+  if (e.key === 'ArrowLeft') window.location.href = 'slide-05-features.html';
+});
+</script>
+</body>
+</html>
